@@ -1,14 +1,19 @@
 import React from 'react'
 //import { IndexLink, Link } from 'react-router'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  width: 100%;
+  text-align: center;
+`;
 
 export const PageLayout = ({ children }) => (
-  <div className='container text-center'>
-    <p>Make your acme codes here</p>
-    <div className='page-layout__viewport'>
+  <Container>
+    <div> //viewport
       {children}
-    </div>{console.log(children)}
-  </div>
+    </div>
+  </Container>
 )
 PageLayout.propTypes = {
   children: PropTypes.node,
