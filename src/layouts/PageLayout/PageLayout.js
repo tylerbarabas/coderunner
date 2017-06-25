@@ -10,7 +10,7 @@ const Container = styled.div`
 
 export const PageLayout = ({ children }) => (
   <Container>
-    <div> //viewport
+    <div> {/*viewport*/}
       {children}
     </div>
   </Container>
