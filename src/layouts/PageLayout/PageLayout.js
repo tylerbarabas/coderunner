@@ -7,7 +7,7 @@ export const PageLayout = ({ children }) => (
     <p>Make your acme codes here</p>
     <div className='page-layout__viewport'>
       {children}
-    </div>
+    </div>{console.log(children)}
   </div>
 )
 PageLayout.propTypes = {
