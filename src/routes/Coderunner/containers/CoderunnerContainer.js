@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
-import { setProperty } from '../modules/counter'
+import { setProperty } from '../modules/coderunner'
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
     component - in this case, the counter:   */
 
-import Counter from '../components/Counter'
+import Coderunner from '../components/Coderunner'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
@@ -17,7 +17,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-  counter : state.counter
+  coderunner : state.coderunner
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
@@ -34,4 +34,4 @@ const mapStateToProps = (state) => ({
     Selectors are composable. They can be used as input to other selectors.
     https://github.com/reactjs/reselect    */
 
-export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+export default connect(mapStateToProps, mapDispatchToProps)(Coderunner)
