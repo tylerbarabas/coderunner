@@ -9,7 +9,7 @@ export const Coderunner = (props) => (
       <div>
         <TopBar />
         <PreviewWindow encodeString={props.coderunner.orderParams.encodeString} />
-        <PropsPanel coderunner={props.coderunner} setProperty={props.setProperty} />
+        <PropsPanel setStep={props.setStep} coderunner={props.coderunner} setProperty={props.setProperty} />
       </div>
 )
 

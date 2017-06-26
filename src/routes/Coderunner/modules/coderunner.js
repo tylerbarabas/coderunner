@@ -2,6 +2,8 @@
 // Constants
 // ------------------------------------
 export const CODERUNNER_SET_PROPERTY = 'CODERUNNER_SET_PROPERTY'
+export const CODERUNNER_SET_STEP = 'CODERUNNER_SET_STEP'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -12,8 +14,16 @@ export function setProperty (key = null,value = null) {
   }
 }
 
+export function setStep (value = 1) {
+  return {
+    type: CODERUNNER_SET_STEP,
+    payload: value
+  }
+}
+
 export const actions = {
-  setProperty
+  setProperty,
+  setStep
 }
 
 // ------------------------------------
@@ -21,12 +31,21 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [CODERUNNER_SET_PROPERTY]: (state, action) => {
-    console.log('action',action);
     return {
       ...state,
       orderParams: {
         ...state.orderParams,
         [action.payload.key]: action.payload.value
+      }
+    }
+  },
+  [CODERUNNER_SET_STEP]: (state, action) => {
+    console.log('reducer',action);
+    return {
+      ...state,
+      volatile: {
+        ...state.volatile,
+        step: state.volatile.step + action.payload
       }
     }
   }
@@ -48,6 +67,7 @@ const initialState = {
     step: 1
   }
 }
+
 export default function coderunnerReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
