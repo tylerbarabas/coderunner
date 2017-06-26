@@ -40,7 +40,6 @@ const ACTION_HANDLERS = {
     }
   },
   [CODERUNNER_SET_STEP]: (state, action) => {
-    console.log('reducer',action);
     return {
       ...state,
       volatile: {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontAwesome from 'react-fontawesome'
 
-const StepOne = styled.div`
+const Container = styled.div`
   padding-top: 5px;
   position: relative;
 `;
@@ -13,6 +13,18 @@ const TextInput = styled.input`
   background-color: #000;
   padding-left: 5px;
   color: #FFFF66;
+  margin-bottom: 10px;
+  width: 150px;
+  height: 30px;
+  font-size: 12px;
+`;
+
+const DropDown = styled.select`
+  background-color: #000;
+  color: #FFFF66;
+  font-size: 12px;
+  width: 150px;
+  height: 30px;
   margin-bottom: 10px;
 `;
 
@@ -64,17 +76,30 @@ class PropsPanel extends React.Component {
     let { encodeString, resolution, tileShape, bgpColor, pixelColor, anim } = this.props.coderunner.orderParams;
     let { step } = this.props.coderunner.volatile;
     return (
-      <StepOne>
-        <div>Enter your text</div>
-        <TextInput type="text" placeholder="www.acme.codes" data-ckey="encodeString" value={encodeString} onChange={this.changed.bind(this)} />
-        <InfoMsg>This is where the scan goes to</InfoMsg>
+      <div style={{position: 'relative'}}>
+
+        <Container style={(step !== 1) ? {display: 'none'} : {}}>
+          <div>Enter your text</div>
+          <TextInput type="text" placeholder="www.acme.codes" data-ckey="encodeString" value={encodeString} onChange={this.changed.bind(this)} />
+          <InfoMsg>This is where the scan goes to</InfoMsg>
+        </Container>
+
+        <Container style={(step !== 2) ? {display: 'none'} : {}}>
+          <div>Choose a shape</div>
+          <DropDown data-ckey="tileShape" onChange={this.changed.bind(this)}>
+            <option value="square">Square</option>
+            <option value="circle">Circle</option>
+          </DropDown>
+          <InfoMsg>More shapes in the future!</InfoMsg>
+        </Container>
+
         <LeftArrow style={(step < 2) ? {display: 'none'} : {}}>
           <FontAwesome name='arrow-circle-left' onClick={this.arrowClicked.bind(this, -1)} />
         </LeftArrow>
-        <RightArrow>
+        <RightArrow style={(step > 4) ? {display: 'none'} : {}}>
           <FontAwesome name='arrow-circle-right' onClick={this.arrowClicked.bind(this, 1)} />
         </RightArrow>
-      </StepOne>
+      </div>
     )
   }
 
