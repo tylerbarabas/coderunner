@@ -1,41 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import styledClassName from 'styled-classnames'
 import FontAwesome from 'react-fontawesome'
 import TopBar from './TopBar'
 import PreviewWindow from './PreviewWindow'
+import PropsPanel from './PropsPanel'
 
-class Coderunner extends React.Component {
-  static propTypes = {
-    coderunner: PropTypes.object.isRequired,
-    setProperty: PropTypes.func.isRequired
-  }
-
-
-  constructor(props) {
-    super(props)
-    console.log('contructor',props);
-    this.state = props.coderunner;
-  }
-
-  changed(e){
-    console.log('changed',e.target.value);
-    this.props.setProperty('encodeString', e.target.value)
-  }
-
-  render() {
-    console.log('rendering...', this.state, this.props);
-    let { encodeString, resolution, tileShape, bgpColor, pixelColor, anim } = this.props.coderunner;
-    return (
+export const Coderunner = (props) => (
       <div>
         <TopBar />
-        <PreviewWindow encodeString={encodeString} />
-        <input type="text" value={encodeString} onChange={this.changed.bind(this)} />
+        <PreviewWindow encodeString={props.coderunner.orderParams.encodeString} />
+        <PropsPanel coderunner={props.coderunner} setProperty={props.setProperty} />
       </div>
-    )
-  }
-
-}
+)
 
 export default Coderunner

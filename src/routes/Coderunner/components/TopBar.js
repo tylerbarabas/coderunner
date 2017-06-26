@@ -23,7 +23,7 @@ const HamburgerIcon = styledClassName`
 
 export const TopBar = () => (
        <Container>
-        <FontAwesome name='bars' className={HamburgerIcon} /> Make your acme codes here
+        <FontAwesome name='bars' className={HamburgerIcon()} /> Make your acme codes here
       </Container> 
 )
 

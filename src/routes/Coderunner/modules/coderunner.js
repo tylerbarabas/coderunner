@@ -24,7 +24,10 @@ const ACTION_HANDLERS = {
     console.log('action',action);
     return {
       ...state,
-      [action.payload.key]: action.payload.value
+      orderParams: {
+        ...state.orderParams,
+        [action.payload.key]: action.payload.value
+      }
     }
   }
 }
@@ -33,12 +36,17 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  encodeString: '',
-  resolution: 400,
-  tileShape: 'square',
-  bgpColor: '#FFFFFF',
-  pixelColor: '#000000',
-  anim: 'Breathe' 
+  orderParams: {
+    encodeString: '',
+    resolution: 400,
+    tileShape: 'square',
+    bgpColor: '#FFFFFF',
+    pixelColor: '#000000',
+    anim: 'Breathe'
+  },
+  volatile: {
+    step: 1
+  }
 }
 export default function coderunnerReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
