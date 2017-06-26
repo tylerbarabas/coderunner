@@ -9,10 +9,6 @@ class App extends React.Component {
     routes: PropTypes.object.isRequired,
   }
 
-  shouldComponentUpdate () {
-    return false
-  }
-
   render () {
     return (
       <Provider store={this.props.store}>
