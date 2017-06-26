@@ -1,14 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import styledClassName from 'styled-classnames'
 import FontAwesome from 'react-fontawesome'
-
-const TopBar = styled.div`
-    height: 50px;
-    background-color: #000;
-    color: #5979d4;
-    line-height: 50px;
-  `;
+import TopBar from './TopBar'
 
 class Coderunner extends React.Component {
   static propTypes = {
@@ -33,9 +28,7 @@ class Coderunner extends React.Component {
     let { encodeString, resolution, tileShape, bgpColor, pixelColor, anim } = this.props.coderunner;
     return (
       <div>
-        <TopBar>
-          <FontAwesome size='2x' name='rocket' /> Make your acme codes here
-        </TopBar>
+        <TopBar />
         <input type="text" value={encodeString} onChange={this.changed.bind(this)} />
       </div>
     )
