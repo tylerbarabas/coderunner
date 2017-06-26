@@ -11,6 +11,11 @@ const TextInput = styled.input`
   background-color: #000;
   padding-left: 5px;
   color: #FFFF66;
+  margin-bottom: 10px;
+`;
+
+const InfoMsg = styled.div`
+  color: #FFFF66;
 `;
 
 class PropsPanel extends React.Component {
@@ -31,7 +36,8 @@ class PropsPanel extends React.Component {
     return (
       <StepOne>
         <div>Enter your text</div>
-        <TextInput type="text" data-ckey="encodeString" value={encodeString} onChange={this.changed.bind(this)} />
+        <TextInput type="text" placeholder="www.acme.codes" data-ckey="encodeString" value={encodeString} onChange={this.changed.bind(this)} />
+        <InfoMsg>This is where the scan goes to</InfoMsg>
       </StepOne>
     )
   }

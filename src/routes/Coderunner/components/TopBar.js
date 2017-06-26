@@ -19,6 +19,7 @@ const HamburgerIcon = styledClassName`
   height: 30px;
   width: 30px;
   padding-top: 7px;
+  margin-right: 5px;
 `;
 
 export const TopBar = () => (

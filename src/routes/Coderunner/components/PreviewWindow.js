@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const containerHeight = window.innerHeight - 200;
+const containerHeight = window.innerHeight - 150;
 
 const Container = styled.div`
   position: relative;
