@@ -34,6 +34,7 @@ if (project.env === 'development') {
   // of development since this directory will be copied into ~/dist
   // when the application is compiled.
   app.use(express.static(path.resolve(project.basePath, 'public')))
+  app.use('/fa', express.static(__dirname.split('/server')[0] + '/node_modules/font-awesome/'));
 
   // This rewrites all routes requests to the root /index.html file
   // (ignoring file requests). If you want to implement universal
