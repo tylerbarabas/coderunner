@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import styledClassName from 'styled-classnames'
 import FontAwesome from 'react-fontawesome'
 import TopBar from './TopBar'
+import PreviewWindow from './PreviewWindow'
 
 class Coderunner extends React.Component {
   static propTypes = {
@@ -29,6 +30,7 @@ class Coderunner extends React.Component {
     return (
       <div>
         <TopBar />
+        <PreviewWindow encodeString={encodeString} />
         <input type="text" value={encodeString} onChange={this.changed.bind(this)} />
       </div>
     )
