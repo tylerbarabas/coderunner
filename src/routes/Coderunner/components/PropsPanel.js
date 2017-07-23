@@ -3,9 +3,20 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import FontAwesome from 'react-fontawesome'
 
+const containerHeight = window.innerHeight - 50;
+
 const Container = styled.div`
-  padding-top: 5px;
-  position: relative;
+  float: right;
+  display: block;
+  background-color: midnightblue;
+  width: 100%;
+  height: ${containerHeight*0.4}px;
+  @media (orientation: landscape){
+    display: inline-block;
+      background-color: yellow;
+      width: 50%;
+      height: ${containerHeight}px;
+    }
 `;
 
 const TextInput = styled.input`
@@ -76,22 +87,22 @@ class PropsPanel extends React.Component {
     let { encodeString, resolution, tileShape, bgpColor, pixelColor, anim } = this.props.coderunner.orderParams;
     let { step } = this.props.coderunner.volatile;
     return (
-      <div style={{position: 'relative'}}>
+      <Container>
 
-        <Container style={(step !== 1) ? {display: 'none'} : {}}>
+        <div style={(step !== 1) ? {display: 'none'} : {}}>
           <div>Enter your text</div>
           <TextInput type="text" placeholder="www.acme.codes" data-ckey="encodeString" value={encodeString} onChange={this.changed.bind(this)} />
           <InfoMsg>This is where the scan goes to</InfoMsg>
-        </Container>
+        </div>
 
-        <Container style={(step !== 2) ? {display: 'none'} : {}}>
+        <div style={(step !== 2) ? {display: 'none'} : {}}>
           <div>Choose a shape</div>
           <DropDown data-ckey="tileShape" onChange={this.changed.bind(this)}>
             <option value="square">Square</option>
             <option value="circle">Circle</option>
           </DropDown>
           <InfoMsg>More shapes in the future!</InfoMsg>
-        </Container>
+        </div>
 
         <LeftArrow style={(step < 2) ? {display: 'none'} : {}}>
           <FontAwesome name='arrow-circle-left' onClick={this.arrowClicked.bind(this, -1)} />
@@ -99,7 +110,7 @@ class PropsPanel extends React.Component {
         <RightArrow style={(step > 4) ? {display: 'none'} : {}}>
           <FontAwesome name='arrow-circle-right' onClick={this.arrowClicked.bind(this, 1)} />
         </RightArrow>
-      </div>
+      </Container>
     )
   }
 

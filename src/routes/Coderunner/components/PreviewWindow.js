@@ -2,19 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const containerHeight = window.innerHeight - 150;
+const containerHeight = window.innerHeight - 50;
 
 const Container = styled.div`
-  position: relative;
-  height: ${containerHeight}px;
-  background-color: #F05F40;
-  color: #000;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  float: left;
+  display: block;
+  background-color: red;
+  width: 100%;
+  height: ${containerHeight*0.6}px;
+  @media (orientation: landscape){
+    display: inline-block;
+    background-color: pink;
+    width:50%;
+    height: ${containerHeight}px;
+    }
+          
+          
 `;
 
 const PreviewImg = styled.img`
   height: ${containerHeight - 40}px;
+  display: none;
 `;
 
 const EncodeString = styled.div`
