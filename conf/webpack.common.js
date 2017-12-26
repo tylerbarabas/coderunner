@@ -14,9 +14,7 @@ module.exports = {
 
   devtool: 'source-map', // enhance debugging by adding meta info for the browser devtools
 
-  entry: {
-    app: './index.js'
-  },
+  entry: [ 'babel-polyfill', './index.js' ],
 
   output: {
     path: path.join(process.cwd(), 'dist'),
@@ -32,11 +30,6 @@ module.exports = {
 
   module: {
     rules: [{
-      enforce: "pre", //to check source files, not modified by other loaders (like babel-loader)
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: "eslint-loader"
-    }, {
       test: /\.js$/,
       exclude: /node_modules/,
       use: {

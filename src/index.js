@@ -1,6 +1,7 @@
-import sayHello from './hello';
 import './index.scss';
+import { getAnimsJson } from './service';
 
-document.getElementById('root').innerHTML = sayHello();
-
-
+let animations = null;
+getAnimsJson().then( json => {
+    animations = json;
+});
