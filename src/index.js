@@ -1,7 +1,5 @@
 import './index.scss';
-import { getAnimsJson } from './service';
+import Coderunner from './coderunner';
 
-let animations = null;
-getAnimsJson().then( json => {
-    animations = json;
-});
+const c = new Coderunner();
+c.init();
