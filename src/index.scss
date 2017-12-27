@@ -1,3 +1,40 @@
 body {
+    position: absolute;
+    display: block;
     background-color: #101a39;
+    height: 987px;
+    width: 100%;
+    margin: 0;
+}
+
+div.topbar {
+    position: relative;
+    outline: thin dashed black;
+    height: 50px;
+    width: 100%;
+}
+
+div.container {
+    position: relative;
+    margin: -2px;
+
+    &.portrait {
+        display: block;
+        height: calc(50% - 25px);
+        width: 100%;
+    }
+
+    &.landscape{
+        display: inline-block;
+        height: calc(100% - 50px);
+        width: 50%;
+    }
+
+    &.props{
+        background-color: orange;
+    }
+
+    &.preview{
+        background-color: pink;
+    }
 }
