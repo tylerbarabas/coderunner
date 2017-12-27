@@ -5,6 +5,7 @@ body {
     height: 987px;
     width: 100%;
     margin: 0;
+    font-size: 16px;
 }
 
 div.topbar {
@@ -17,6 +18,7 @@ div.topbar {
 div.container {
     position: relative;
     margin: -2px;
+    float: left;
 
     &.portrait {
         display: block;
@@ -37,4 +39,8 @@ div.container {
     &.preview{
         background-color: pink;
     }
+}
+
+div.step{
+    padding: 75px;
 }
