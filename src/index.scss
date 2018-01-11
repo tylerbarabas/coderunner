@@ -2,7 +2,7 @@ body {
     position: absolute;
     display: block;
     background-color: #101a39;
-    height: 987px;
+    height: 100%;
     width: 100%;
     margin: 0;
     font-size: 16px;
@@ -17,7 +17,6 @@ div.topbar {
 
 div.container {
     position: relative;
-    margin: -2px;
     float: left;
 
     &.portrait {
@@ -33,14 +32,39 @@ div.container {
     }
 
     &.props{
-        background-color: orange;
+        background-color: #101a39;
     }
 
     &.preview{
-        background-color: pink;
+        background-color: #3e3e3e;
     }
 }
 
 div.step{
     padding: 75px;
+}
+
+// FONTS
+p.directions {
+    color: #6e98fe;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+p.topline {
+    color: #e0b19a;
+    margin: 0;
+    line-height: 50px;
+}
+
+p.big {
+    font-size: 25px;
+}
+
+p.medium {
+    font-size: 20px;
+}
+
+p.small {
+    font-size: 15px;
 }
