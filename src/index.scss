@@ -33,6 +33,7 @@ div.container {
 
     &.props{
         background-color: #101a39;
+        text-align: center;
     }
 
     &.preview{
@@ -44,10 +45,18 @@ div.step{
     padding: 75px;
 }
 
+input.scan-destination {
+    height: 25px;
+    width: 200px;
+    font-size: 20px;
+    margin-top: 5px;
+    padding-left: 21px;
+}
+
 // FONTS
 p.directions {
     color: #6e98fe;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
