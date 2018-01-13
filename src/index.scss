@@ -16,6 +16,28 @@ div.topbar {
     width: 100%;
 }
 
+div.hamburger-container {
+    margin: 7px;
+    background-color: #b6def0;
+    height: 36px;
+    width: 36px;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+i.hamburger {
+    margin-top: 6px;
+    margin-left: 7px;
+    font-size: 26px;
+}
+
+div.topline-text {
+    color: #e0b19a;
+    margin: 0;
+    line-height: 50px;
+    display: inline-block;
+}
+
 div.container {
     position: relative;
     float: left;
@@ -77,20 +99,14 @@ p.directions {
     margin-bottom: 10px;
 }
 
-p.topline {
-    color: #e0b19a;
-    margin: 0;
-    line-height: 50px;
-}
-
-p.big {
+.big {
     font-size: 40px;
 }
 
-p.medium {
+.medium {
     font-size: 27px;
 }
 
-p.small {
+.small {
     font-size: 20px;
 }
