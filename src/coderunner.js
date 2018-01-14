@@ -1,4 +1,4 @@
-import { domain, getAnimsJson, newOrder, checkProgress } from './service';
+import * as Service from './service';
 
 export default class Coderunner {
     constructor(){
@@ -37,7 +37,7 @@ export default class Coderunner {
     }
 
     getAnimations(){    
-        getAnimsJson().then( json => {
+        Service.getAnimsJson().then( json => {
             this.animations = json;
         });
     }
@@ -87,7 +87,7 @@ export default class Coderunner {
     }
 
     sendNewOrder( params ){
-        newOrder( params ).then( res => {
+        Service.newOrder( params ).then( res => {
             this.orderNumber = res.orderNumber;
             if ( this.progressLoop !== null ) this.stopProgressLoop();
             this.stopProgressLoop();
@@ -119,7 +119,7 @@ export default class Coderunner {
     }
 
     showFirstFrame(){
-        this.previewImage.src = domain + '/orders/' + this.orderNumber + '/frames/1';
+        this.previewImage.src = Service.domain + '/orders/' + this.orderNumber + '/frames/1';
     }
 
     isImageOk( img = this.previewImage ) {
