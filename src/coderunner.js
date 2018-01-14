@@ -9,7 +9,7 @@ export default class Coderunner {
         this.throttle = null; 
 
         //Elements
-        this.previewImg = null;
+        this.previewImage = null;
         this.previewOverlay = null;
 
         //Events
@@ -17,10 +17,11 @@ export default class Coderunner {
         this.scanDestinationChanged = this.scanDestinationChanged.bind(this);
         this.previewImageLoaded = this.previewImageLoaded.bind(this);
         this.previewImageError = this.previewImageError.bind(this);
+        this.makePreviewSquare = this.makePreviewSquare.bind(this);
     }
 
     init(){
-        this.previewImg = document.getElementById('preview-img');
+        this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
 
         this.getAnimations();
@@ -31,8 +32,8 @@ export default class Coderunner {
     enableListeners(){
         window.addEventListener( 'resize', this.setScreenOrientation );
         document.getElementById( 'scan-destination' ).addEventListener( 'keydown', this.scanDestinationChanged );
-        this.previewImg.addEventListener( 'load', this.previewImageLoaded );
-        this.previewImg.addEventListener( 'error', this.previewImageError );
+        this.previewImage.addEventListener( 'load', this.previewImageLoaded );
+        this.previewImage.addEventListener( 'error', this.previewImageError );
     }
 
     getAnimations(){    
@@ -49,7 +50,29 @@ export default class Coderunner {
             c.className = c.className.split(' portrait')[0].split(' landscape')[0];
             c.className += ' ' + orientation;
         }
+
+        window.setTimeout( this.makePreviewSquare, 0 );
     }
+
+    makePreviewSquare(){
+        this.previewImage.style.height = null;
+        this.previewImage.style.width = null; 
+        this.previewOverlay.style.height = null;
+        this.previewOverlay.style.width = null;
+
+        let height = this.previewImage.offsetHeight;
+        let width = this.previewImage.offsetWidth;
+        let smaller = Math.min( height, width );
+
+        this.previewImage.style.height = smaller+'px';
+        this.previewImage.style.width = smaller+'px';
+        this.previewImage.style.left = smaller/2+'px';
+
+        this.previewOverlay.style.height = smaller+'px';
+        this.previewOverlay.style.width = smaller+'px';
+        this.previewOverlay.style.left = smaller/2+'px';
+    }
+
 
     scanDestinationChanged( e ) {
         let params = { 
@@ -96,10 +119,10 @@ export default class Coderunner {
     }
 
     showFirstFrame(){
-        this.previewImg.src = domain + '/orders/' + this.orderNumber + '/frames/1';
+        this.previewImage.src = domain + '/orders/' + this.orderNumber + '/frames/1';
     }
 
-    isImageOk( img = this.previewImg ) {
+    isImageOk( img = this.previewImage ) {
         if (!img.complete || img.naturalWidth === 0) return false;
         return true;
     }
