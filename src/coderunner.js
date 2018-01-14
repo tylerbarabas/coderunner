@@ -66,11 +66,11 @@ export default class Coderunner {
 
         this.previewImage.style.height = smaller+'px';
         this.previewImage.style.width = smaller+'px';
-        this.previewImage.style.left = smaller/2+'px';
+        this.previewImage.style.left = 'calc(50% - ' + smaller/2+'px)';
 
         this.previewOverlay.style.height = smaller+'px';
         this.previewOverlay.style.width = smaller+'px';
-        this.previewOverlay.style.left = smaller/2+'px';
+        this.previewOverlay.style.left = 'calc(50% - ' + smaller/2+'px)';
     }
 
 
@@ -113,7 +113,7 @@ export default class Coderunner {
     }
 
     getProgress( orderNumber = this.orderNumber ) {
-        checkProgress( orderNumber ).then( json => {
+        Service.checkProgress( orderNumber ).then( json => {
             this.progress = json.progress;
         });
     }
