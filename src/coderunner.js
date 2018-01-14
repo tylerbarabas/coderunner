@@ -1,24 +1,38 @@
-import { getAnimsJson, newOrder, checkProgress } from './service';
+import { domain, getAnimsJson, newOrder, checkProgress } from './service';
 
 export default class Coderunner {
     constructor(){
+        //Variables
         this.animations = null;
         this.orderNumber = null;
         this.progress = null;
+        this.throttle = null; 
 
+        //Elements
+        this.previewImg = null;
+        this.previewOverlay = null;
+
+        //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
         this.scanDestinationChanged = this.scanDestinationChanged.bind(this);
+        this.previewImageLoaded = this.previewImageLoaded.bind(this);
+        this.previewImageError = this.previewImageError.bind(this);
     }
 
     init(){
+        this.previewImg = document.getElementById('preview-img');
+        this.previewOverlay = document.getElementById('preview-overlay');
+
         this.getAnimations();
         this.setScreenOrientation();
         this.enableListeners();
     }
 
     enableListeners(){
-        window.addEventListener('resize', this.setScreenOrientation);
-        document.getElementById('scan-destination').addEventListener('change', this.scanDestinationChanged);
+        window.addEventListener( 'resize', this.setScreenOrientation );
+        document.getElementById( 'scan-destination' ).addEventListener( 'keydown', this.scanDestinationChanged );
+        this.previewImg.addEventListener( 'load', this.previewImageLoaded );
+        this.previewImg.addEventListener( 'error', this.previewImageError );
     }
 
     getAnimations(){    
@@ -38,19 +52,34 @@ export default class Coderunner {
     }
 
     scanDestinationChanged( e ) {
-        newOrder({ msg: e.target.value }).then( res => {
+        let params = { 
+            xres: '500',
+            yres: '500',
+            anim: 'staticCodeOnly',
+            msg: e.target.value 
+        }; 
+
+        window.clearTimeout( this.throttle );
+        this.throttle = window.setTimeout( this.sendNewOrder.bind(this, params), 500 );
+    }
+
+    sendNewOrder( params ){
+        newOrder( params ).then( res => {
             this.orderNumber = res.orderNumber;
             if ( this.progressLoop !== null ) this.stopProgressLoop();
+            this.stopProgressLoop();
             this.startProgressLoop();
         });
     }
 
     startProgressLoop(){
+        this.showPreviewOverlay();
         this.progressLoop = window.setInterval(() => {
             if (this.progress < 100) {
                 this.getProgress();
             } else {
                 this.stopProgressLoop();
+                this.showFirstFrame();
             }
         }, 1000);
     }
@@ -64,5 +93,32 @@ export default class Coderunner {
         checkProgress( orderNumber ).then( json => {
             this.progress = json.progress;
         });
+    }
+
+    showFirstFrame(){
+        this.previewImg.src = domain + '/orders/' + this.orderNumber + '/frames/1';
+    }
+
+    isImageOk( img = this.previewImg ) {
+        if (!img.complete || img.naturalWidth === 0) return false;
+        return true;
+    }
+
+    previewImageLoaded(){
+        this.hidePreviewOverlay();
+    }
+
+    showPreviewOverlay(){
+       this.previewOverlay.className = this.previewOverlay.className.split(' hide')[0]; 
+    }
+
+    hidePreviewOverlay(){
+        if (this.previewOverlay.className.search(/hide/) === -1) {
+            this.previewOverlay.className = this.previewOverlay.className + ' hide';
+        }
+    }
+
+    previewImageError(){
+        this.showFirstFrame();
     }
 }
