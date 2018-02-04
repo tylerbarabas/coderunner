@@ -11,6 +11,7 @@ export default class Coderunner {
         //Elements
         this.previewImage = null;
         this.previewOverlay = null;
+        this.progressBar = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -23,6 +24,7 @@ export default class Coderunner {
     init(){
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
+        this.progressBar = document.getElementById('progress-bar-inner');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -75,6 +77,9 @@ export default class Coderunner {
 
 
     scanDestinationChanged( e ) {
+        var charcode = e.charCode;
+        var c = String.fromCharCode(charcode);
+
         let params = { 
             xres: '500',
             yres: '500',
@@ -96,8 +101,11 @@ export default class Coderunner {
     }
 
     startProgressLoop(){
+        this.progress = 0;
+        this.setProgressBar();
         this.showPreviewOverlay();
         this.progressLoop = window.setInterval(() => {
+            this.setProgressBar();
             if (this.progress < 100) {
                 this.getProgress();
             } else {
@@ -116,6 +124,11 @@ export default class Coderunner {
         Service.checkProgress( orderNumber ).then( json => {
             this.progress = json.progress;
         });
+    }
+
+    setProgressBar( progress = this.progress ){
+        this.progressBar.innerText = this.progress + '%';
+        this.progressBar.style.width = this.progress + '%';
     }
 
     showFirstFrame(){

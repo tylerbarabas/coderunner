@@ -93,10 +93,24 @@ div.preview-overlay {
     }
 }
 
+div.progress-bar-outter{
+    height: 15px;
+    width: 300px;
+    background-color: #fff;
+    margin: 0 auto;
+}
+
+div.progress-bar-inner{
+    height: 100%;
+    width: 0;
+    background-color: blue;
+    transition: 500ms width;
+}
+
 div.centered {
     position: relative;
     top: 50%;
-    transform: translateY(-57%);
+    transform: translateY(-50%);
 }
 
 input.scan-destination {
