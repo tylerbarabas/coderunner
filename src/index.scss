@@ -109,7 +109,7 @@ div.progress-bar-inner{
 
 div.centered {
     position: relative;
-    top: 50%;
+    top: 48%;
     transform: translateY(-50%);
 }
 
@@ -121,10 +121,55 @@ input.scan-destination {
     padding-left: 21px;
 }
 
+div.next-button {
+    &.wrapper {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 30px;
+        color: yellow;
+    }
+
+    .outter {
+        background-color: #213c8f;
+        height: 100px;
+        width: 100px;
+        border-radius: 100px;
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    .text {
+        display: inline-block;
+        position: relative;
+        top: 12px;
+    }
+
+    .inner {
+        background-color: yellow;
+        height: 70px;
+        width: 70px;
+        border-radius: 50px;
+        margin-left: auto;
+        margin-right: auto;
+
+        position: relative;
+        top: 15px;
+    }
+
+    .next-icon {
+        font-size: 60px;
+        position: relative;
+        top: 4px;
+        left: 3px;
+        color: #213c8f;
+    }
+}
+
 // FONTS
 p.directions {
     color: #6e98fe;
-    margin-top: 10px;
+    margin-top: -10px;
     margin-bottom: 10px;
 }
 
