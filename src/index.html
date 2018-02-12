@@ -14,6 +14,16 @@
         </div>
     </div>
     <div class="container preview">
+        <div class="prev-button wrapper" id="prev-button">
+           <div class="outter">
+                <div class="inner">
+                    <i class="fa fa-angle-left icon"></i>
+                </div>
+            </div>
+             <div class="text">
+                Back
+            </div>
+        </div>
         <div class="preview-img-container centered">
             <img class="preview-img" id="preview-img" src="https://acme.codes/modules/coderunner/client/img/default.gif">
             <div class="preview-overlay hide" id="preview-overlay">
@@ -26,23 +36,46 @@
         </div>
     </div>
     <div class="container props">
-        <div class="centered" id="step1">
+        <div class="centered step" id="step1">
             <label for="message">
                 <p class="directions big">Scan destination?</p>
                 <p class="directions medium">Social page... Web site...</p>
             </label>
             <input type="text" name="message" class="scan-destination" id="scan-destination" placeholder="www.example.com">
         </div>
-        <div class="next-button wrapper">
+        <div class="centered step" id="step2">
+            <label for="shape">
+                <p class="directions big">Choose a shape</p>
+            </label>
+            <select name="shape" class="shape" id="shape">
+                <option>Squares</option>
+                <option>Circles</option>
+            </select>
+        </div>
+        <div class="centered step" id="step3">
+            <label for="color">
+                <p class="directions big">Choose colors</p>
+            </label>
+            <div class="background-color">Background color</div>
+            <div class="dot-color">Dot color</div>
+        </div>
+        <div class="centered step" id="step4">
+            <label for="upload-file">
+                <p class="directions big">Add logo / picture</p>
+            </label>
+            <div class="upload-file">Upload file</div>
+        </div>
+        <div class="next-button wrapper" id="next-button">
             <div class="text">
                 Next
             </div>
             <div class="outter">
                 <div class="inner">
-                    <i class="fa fa-angle-right next-icon"></i>
+                    <i class="fa fa-angle-right icon"></i>
                 </div>
             </div>
         </div>
+
     </div>
   </body>
 </html>

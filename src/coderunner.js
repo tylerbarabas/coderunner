@@ -7,11 +7,14 @@ export default class Coderunner {
         this.orderNumber = null;
         this.progress = null;
         this.throttle = null; 
+        this.currentStep = null;
 
         //Elements
         this.previewImage = null;
         this.previewOverlay = null;
         this.progressBar = null;
+        this.nextButton = null;
+        this.prevButton = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -19,16 +22,23 @@ export default class Coderunner {
         this.previewImageLoaded = this.previewImageLoaded.bind(this);
         this.previewImageError = this.previewImageError.bind(this);
         this.makePreviewSquare = this.makePreviewSquare.bind(this);
+        this.nextButtonClicked = this.nextButtonClicked.bind(this);
+        this.prevButtonClicked = this.prevButtonClicked.bind(this);
     }
 
     init(){
+        this.currentStep = 1;
+
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
         this.progressBar = document.getElementById('progress-bar-inner');
+        this.nextButton = document.getElementById('next-button');
+        this.prevButton = document.getElementById('prev-button');
 
         this.getAnimations();
         this.setScreenOrientation();
         this.enableListeners();
+        this.refreshStep();
     }
 
     enableListeners(){
@@ -36,6 +46,8 @@ export default class Coderunner {
         document.getElementById( 'scan-destination' ).addEventListener( 'keydown', this.scanDestinationChanged );
         this.previewImage.addEventListener( 'load', this.previewImageLoaded );
         this.previewImage.addEventListener( 'error', this.previewImageError );
+        this.nextButton.addEventListener( 'click', this.nextButtonClicked );
+        this.prevButton.addEventListener( 'click', this.prevButtonClicked );
     }
 
     getAnimations(){    
@@ -156,5 +168,41 @@ export default class Coderunner {
 
     previewImageError(){
         this.showFirstFrame();
+    }
+
+    nextButtonClicked(){
+        this.currentStep += 1;
+        this.refreshStep();
+    }
+
+    prevButtonClicked(){
+        this.currentStep -= 1;
+        this.refreshStep();
+    }
+
+    refreshStep(){
+        let allSteps = [].slice.call(document.getElementsByClassName('step'));
+        if (this.currentStep < 1) this.currentStep = 1;
+        if (this.currentStep > allSteps.length) this.currentStep = allSteps.length;
+
+        let selectedElement = document.getElementById('step'+this.currentStep);
+        selectedElement.style.display = 'block';
+
+        let otherElements = allSteps.filter(e => e !== selectedElement);
+        for (let i=0;i<otherElements.length;i+=1){
+            otherElements[i].style.display = 'none';
+        }
+
+        if (this.currentStep < 2) {
+            this.prevButton.style.display = 'none';
+        } else {
+            this.prevButton.style.display = 'block';
+        }
+ 
+        if (this.currentStep >= allSteps.length) {
+            this.nextButton.style.display = 'none';
+        } else {
+            this.nextButton.style.display = 'block';
+        }
     }
 }
