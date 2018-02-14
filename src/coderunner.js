@@ -8,6 +8,7 @@ export default class Coderunner {
         this.progress = null;
         this.throttle = null; 
         this.currentStep = null;
+        this.message = null;
 
         //Elements
         this.previewImage = null;
@@ -28,6 +29,7 @@ export default class Coderunner {
 
     init(){
         this.currentStep = 1;
+        this.message = '';
 
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
@@ -43,7 +45,7 @@ export default class Coderunner {
 
     enableListeners(){
         window.addEventListener( 'resize', this.setScreenOrientation );
-        document.getElementById( 'scan-destination' ).addEventListener( 'keydown', this.scanDestinationChanged );
+        document.getElementById( 'scan-destination' ).addEventListener( 'keyup', this.scanDestinationChanged );
         this.previewImage.addEventListener( 'load', this.previewImageLoaded );
         this.previewImage.addEventListener( 'error', this.previewImageError );
         this.nextButton.addEventListener( 'click', this.nextButtonClicked );
@@ -89,14 +91,18 @@ export default class Coderunner {
 
 
     scanDestinationChanged( e ) {
-        var charcode = e.charCode;
-        var c = String.fromCharCode(charcode);
+        console.log('event', e);
+        console.log('e.target.value', e.target.value);
+        console.log('this.message', this.message);
+        if (e.target.value === this.message) return;
+        this.message = e.target.value;
 
         let params = { 
             xres: '500',
             yres: '500',
             anim: 'staticCodeOnly',
-            msg: e.target.value 
+            msg: this.message,
+            frameNumber: 1
         }; 
 
         window.clearTimeout( this.throttle );
