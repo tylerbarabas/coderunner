@@ -91,10 +91,12 @@ export default class Coderunner {
 
 
     scanDestinationChanged( e ) {
-        console.log('event', e);
-        console.log('e.target.value', e.target.value);
-        console.log('this.message', this.message);
-        if (e.target.value === this.message) return;
+        if (e.target.value === '')
+            this.nextButton.style.display = 'none';
+        else
+            this.nextButton.style.display = 'block';       
+
+        if (e.target.value === '' && e.target.value === this.message) return;
         this.message = e.target.value;
 
         let params = { 
@@ -205,7 +207,7 @@ export default class Coderunner {
             this.prevButton.style.display = 'block';
         }
  
-        if (this.currentStep >= allSteps.length) {
+        if (this.message === '' || this.currentStep >= allSteps.length) {
             this.nextButton.style.display = 'none';
         } else {
             this.nextButton.style.display = 'block';
