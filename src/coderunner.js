@@ -16,6 +16,7 @@ export default class Coderunner {
         this.progressBar = null;
         this.nextButton = null;
         this.prevButton = null;
+        this.shapeSelector = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -25,6 +26,7 @@ export default class Coderunner {
         this.makePreviewSquare = this.makePreviewSquare.bind(this);
         this.nextButtonClicked = this.nextButtonClicked.bind(this);
         this.prevButtonClicked = this.prevButtonClicked.bind(this);
+        this.orderParamChanged = this.orderParamChanged.bind(this);
     }
 
     init(){
@@ -36,6 +38,7 @@ export default class Coderunner {
         this.progressBar = document.getElementById('progress-bar-inner');
         this.nextButton = document.getElementById('next-button');
         this.prevButton = document.getElementById('prev-button');
+        this.shapeSelector = document.getElementById('shape');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -50,6 +53,8 @@ export default class Coderunner {
         this.previewImage.addEventListener( 'error', this.previewImageError );
         this.nextButton.addEventListener( 'click', this.nextButtonClicked );
         this.prevButton.addEventListener( 'click', this.prevButtonClicked );
+        this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
+        
     }
 
     getAnimations(){    
@@ -89,7 +94,6 @@ export default class Coderunner {
         this.previewOverlay.style.left = 'calc(50% - ' + smaller/2+'px)';
     }
 
-
     scanDestinationChanged( e ) {
         if (e.target.value === '')
             this.nextButton.style.display = 'none';
@@ -109,6 +113,11 @@ export default class Coderunner {
 
         window.clearTimeout( this.throttle );
         this.throttle = window.setTimeout( this.sendNewOrder.bind(this, params), 500 );
+    }
+
+    orderParamChanged(){
+        let form = document.getElementById('form-data');
+        console.log('orderParamChanged', form);
     }
 
     sendNewOrder( params ){
