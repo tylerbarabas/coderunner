@@ -1,3 +1,4 @@
+import formSerialize from 'form-serialize';
 import * as Service from './service';
 
 export default class Coderunner {
@@ -17,6 +18,8 @@ export default class Coderunner {
         this.nextButton = null;
         this.prevButton = null;
         this.shapeSelector = null;
+        this.backgroundColorButton = null;
+        this.dotColorButton = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -27,6 +30,7 @@ export default class Coderunner {
         this.nextButtonClicked = this.nextButtonClicked.bind(this);
         this.prevButtonClicked = this.prevButtonClicked.bind(this);
         this.orderParamChanged = this.orderParamChanged.bind(this);
+        this.colorButtonClicked = this.colorButtonClicked.bind(this);
     }
 
     init(){
@@ -39,6 +43,8 @@ export default class Coderunner {
         this.nextButton = document.getElementById('next-button');
         this.prevButton = document.getElementById('prev-button');
         this.shapeSelector = document.getElementById('shape');
+        this.backgroundColorButton = document.getElementById('background-color-button');
+        this.dotColorButton = document.getElementById('dot-color-button');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -54,7 +60,8 @@ export default class Coderunner {
         this.nextButton.addEventListener( 'click', this.nextButtonClicked );
         this.prevButton.addEventListener( 'click', this.prevButtonClicked );
         this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
-        
+        this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
+        this.dotColorButton.addEventListener( 'click', this.colorButtonClicked );
     }
 
     getAnimations(){    
@@ -106,9 +113,7 @@ export default class Coderunner {
         let params = { 
             xres: '500',
             yres: '500',
-            anim: 'staticCodeOnly',
-            msg: this.message,
-            frameNumber: 1
+            msg: e.target.value
         }; 
 
         window.clearTimeout( this.throttle );
@@ -117,10 +122,15 @@ export default class Coderunner {
 
     orderParamChanged(){
         let form = document.getElementById('form-data');
-        console.log('orderParamChanged', form);
+        let params = formSerialize(form, {hash: true});
+        this.sendNewOrder( params );
     }
 
     sendNewOrder( params ){
+        if (this.currentStep < 3) { 
+            params.frameNumber = 1;
+            params.anim = 'staticCodeOnly';
+        }
         Service.newOrder( params ).then( res => {
             this.orderNumber = res.orderNumber;
             if ( this.progressLoop !== null ) this.stopProgressLoop();
@@ -221,5 +231,16 @@ export default class Coderunner {
         } else {
             this.nextButton.style.display = 'block';
         }
+    }
+
+    colorButtonClicked(e){
+        let type = e.target.id.split('-')[0];
+        let target = e.target;
+        let sibling = e.target.nextElementSibling || e.target.previousElementSibling;
+
+        target.style.color = '#f7f000';
+        target.style.borderColor = '#f7f000';
+        sibling.style.color = '';
+        sibling.style.borderColor = '';
     }
 }
