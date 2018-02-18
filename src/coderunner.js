@@ -110,14 +110,8 @@ export default class Coderunner {
         if (e.target.value === '' && e.target.value === this.message) return;
         this.message = e.target.value;
 
-        let params = { 
-            xres: '500',
-            yres: '500',
-            msg: e.target.value
-        }; 
-
         window.clearTimeout( this.throttle );
-        this.throttle = window.setTimeout( this.sendNewOrder.bind(this, params), 500 );
+        this.throttle = window.setTimeout( this.orderParamChanged.bind(this), 500 );
     }
 
     orderParamChanged(){
