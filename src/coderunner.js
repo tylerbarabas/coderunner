@@ -22,6 +22,7 @@ export default class Coderunner {
         this.shapeSelector = null;
         this.backgroundColorButton = null;
         this.dotsColorButton = null;
+        this.colorPicker = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -47,6 +48,7 @@ export default class Coderunner {
         this.shapeSelector = document.getElementById('shape');
         this.backgroundColorButton = document.getElementById('background-color-button');
         this.dotsColorButton = document.getElementById('dots-color-button');
+        this.colorPicker = document.getElementById('color-picker-container');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -234,11 +236,15 @@ export default class Coderunner {
         let target = e.target;
         let sibling = e.target.nextElementSibling || e.target.previousElementSibling;
 
-        target.style.color = '#f7f000';
-        target.style.borderColor = '#f7f000';
-        sibling.style.color = '';
-        sibling.style.borderColor = '';
-        this.buildColorPicker(type);
+        if (target.className.search('selected') === -1) {
+            target.className = 'color-btn selected';
+            sibling.className = 'color-btn';
+            this.colorPicker.style.display = 'block';
+            this.buildColorPicker(type);
+        } else { 
+            this.colorPicker.style.display = 'none';
+            target.className = 'color-btn';
+        }
     }
 
     buildColorPicker(type){
@@ -255,5 +261,9 @@ export default class Coderunner {
             swatch.style.backgroundColor = arr[i];
             container.appendChild(swatch);
         }
+
+        let bgColor = 'rgba(255,255,255,0.9)';
+        if (type === 'dots') bgColor = 'rgba(0,0,0,0.9)';
+        container.parentNode.style.backgroundColor = bgColor;
     }
 }

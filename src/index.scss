@@ -215,7 +215,7 @@ div.step {
     display: none;
 }
 
-div.dots-color, div.background-color{
+div.color-btn{
     height: 50px;
     width: 300px;
     margin: 10px auto;
@@ -225,18 +225,23 @@ div.dots-color, div.background-color{
     font-size: 30px;
     line-height: 48px;
     cursor: pointer;
+
+    &.selected{
+        color: #f7f000;
+        border-color: #f7f000; 
+    }
 }
 
 div.color-picker-container {
     height: 100%;
     width: 100%;
-    background-color: rgba(0,0,0,0.9);
     position: absolute;
     top: 0;
+    display: none;
+
     .color-picker{
         height: 80%;
         width: 80%;
-        background-color: red;
         margin: 0 auto;
         padding: 40px;
 
