@@ -1,5 +1,7 @@
 import formSerialize from 'form-serialize';
 import * as Service from './service';
+import colors from 'colors.json';
+console.log('colors', colors);
 
 export default class Coderunner {
     constructor(){
@@ -19,7 +21,7 @@ export default class Coderunner {
         this.prevButton = null;
         this.shapeSelector = null;
         this.backgroundColorButton = null;
-        this.dotColorButton = null;
+        this.dotsColorButton = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -44,7 +46,7 @@ export default class Coderunner {
         this.prevButton = document.getElementById('prev-button');
         this.shapeSelector = document.getElementById('shape');
         this.backgroundColorButton = document.getElementById('background-color-button');
-        this.dotColorButton = document.getElementById('dot-color-button');
+        this.dotsColorButton = document.getElementById('dots-color-button');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -61,7 +63,7 @@ export default class Coderunner {
         this.prevButton.addEventListener( 'click', this.prevButtonClicked );
         this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
         this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
-        this.dotColorButton.addEventListener( 'click', this.colorButtonClicked );
+        this.dotsColorButton.addEventListener( 'click', this.colorButtonClicked );
     }
 
     getAnimations(){    
@@ -236,5 +238,22 @@ export default class Coderunner {
         target.style.borderColor = '#f7f000';
         sibling.style.color = '';
         sibling.style.borderColor = '';
+        this.buildColorPicker(type);
+    }
+
+    buildColorPicker(type){
+        let colorSwatches = document.getElementsByClassName('color-swatch');
+        for (let i=colorSwatches.length-1;i>-1;i-=1){
+            colorSwatches[i].parentNode.removeChild(colorSwatches[i]);
+        }
+
+        let container = document.getElementById('color-picker');
+        let arr = colors[type];
+        for (let i=0;i<arr.length;i+=1){
+            let swatch = document.createElement('DIV');
+            swatch.className = 'color-swatch';
+            swatch.style.backgroundColor = arr[i];
+            container.appendChild(swatch);
+        }
     }
 }

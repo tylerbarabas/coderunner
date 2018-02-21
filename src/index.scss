@@ -215,7 +215,7 @@ div.step {
     display: none;
 }
 
-div.dot-color, div.background-color{
+div.dots-color, div.background-color{
     height: 50px;
     width: 300px;
     margin: 10px auto;
@@ -225,6 +225,29 @@ div.dot-color, div.background-color{
     font-size: 30px;
     line-height: 48px;
     cursor: pointer;
+}
+
+div.color-picker-container {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.9);
+    position: absolute;
+    top: 0;
+    .color-picker{
+        height: 80%;
+        width: 80%;
+        background-color: red;
+        margin: 0 auto;
+        padding: 40px;
+
+        .color-swatch{
+            background-color: blue;
+            height: 18%;
+            width: 18%;
+            display: inline-block;
+            margin: 15px;
+        }
+    }
 }
 
 // FONTS
