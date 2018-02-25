@@ -260,11 +260,11 @@ export default class Coderunner {
     }
 
     openColorPicker(){
-            this.colorPicker.style.opacity = 1;
+        this.colorPicker.style.opacity = 1;
     }
 
     closeColorPicker(){
-            this.colorPicker.style.opacity = 0;
+        this.colorPicker.style.opacity = 0;
     }
 
     buildColorPicker(type){
