@@ -252,6 +252,13 @@ div.color-picker-container {
             display: inline-block;
             margin: 15px;
         }
+
+        .x-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+       }
     }
 }
 

@@ -23,6 +23,7 @@ export default class Coderunner {
         this.backgroundColorButton = null;
         this.dotsColorButton = null;
         this.colorPicker = null;
+        this.xClose = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -34,6 +35,7 @@ export default class Coderunner {
         this.prevButtonClicked = this.prevButtonClicked.bind(this);
         this.orderParamChanged = this.orderParamChanged.bind(this);
         this.colorButtonClicked = this.colorButtonClicked.bind(this);
+        this.xCloseClicked = this.xCloseClicked.bind(this);
     }
 
     init(){
@@ -49,6 +51,7 @@ export default class Coderunner {
         this.backgroundColorButton = document.getElementById('background-color-button');
         this.dotsColorButton = document.getElementById('dots-color-button');
         this.colorPicker = document.getElementById('color-picker-container');
+        this.xClose = document.getElementById('x-close');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -66,9 +69,10 @@ export default class Coderunner {
         this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
         this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.dotsColorButton.addEventListener( 'click', this.colorButtonClicked );
+        this.xClose.addEventListener( 'click', this.xCloseClicked );
     }
 
-    getAnimations(){    
+    getAnimations(){ 
         Service.getAnimsJson().then( json => {
             this.animations = json;
         });
@@ -239,12 +243,28 @@ export default class Coderunner {
         if (target.className.search('selected') === -1) {
             target.className = 'color-btn selected';
             sibling.className = 'color-btn';
-            this.colorPicker.style.display = 'block';
+            this.openColorPicker();
             this.buildColorPicker(type);
         } else { 
-            this.colorPicker.style.display = 'none';
             target.className = 'color-btn';
+            this.closeColorPicker();
         }
+    }
+
+    xCloseClicked(){
+        let selected = document.getElementsByClassName('selected');
+        for (let i=0;i<selected.length;i+=1){
+            selected[i].className = 'color-btn';
+        }
+        this.closeColorPicker();
+    }
+
+    openColorPicker(){
+        this.colorPicker.style.display = 'block';
+    }
+
+    closeColorPicker(){
+        this.colorPicker.style.display = 'none';
     }
 
     buildColorPicker(type){
@@ -263,7 +283,12 @@ export default class Coderunner {
         }
 
         let bgColor = 'rgba(255,255,255,0.9)';
-        if (type === 'dots') bgColor = 'rgba(0,0,0,0.9)';
+        let xColor = 'rgba(0,0,0,1)';
+        if (type === 'dots') {
+            bgColor = 'rgba(0,0,0,0.9)';
+            xColor = 'rgba(255,255,255,1)';
+        }
         container.parentNode.style.backgroundColor = bgColor;
+        this.xClose.style.color = xColor;
     }
 }
