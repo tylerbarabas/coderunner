@@ -260,11 +260,11 @@ export default class Coderunner {
     }
 
     openColorPicker(){
-        this.colorPicker.style.display = 'block';
+            this.colorPicker.style.opacity = 1;
     }
 
     closeColorPicker(){
-        this.colorPicker.style.display = 'none';
+            this.colorPicker.style.opacity = 0;
     }
 
     buildColorPicker(type){
@@ -282,10 +282,10 @@ export default class Coderunner {
             container.appendChild(swatch);
         }
 
-        let bgColor = 'rgba(255,255,255,0.9)';
+        let bgColor = 'rgba(255,255,255,0.8)';
         let xColor = 'rgba(0,0,0,1)';
         if (type === 'dots') {
-            bgColor = 'rgba(0,0,0,0.9)';
+            bgColor = 'rgba(0,0,0,0.8)';
             xColor = 'rgba(255,255,255,1)';
         }
         container.parentNode.style.backgroundColor = bgColor;
