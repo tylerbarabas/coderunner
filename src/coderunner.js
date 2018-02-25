@@ -1,7 +1,6 @@
 import formSerialize from 'form-serialize';
 import * as Service from './service';
 import colors from 'colors.json';
-console.log('colors', colors);
 
 export default class Coderunner {
     constructor(){
@@ -24,6 +23,9 @@ export default class Coderunner {
         this.dotsColorButton = null;
         this.colorPicker = null;
         this.xClose = null;
+        this.scanDestination = null;
+        this.bgpColor = null;
+        this.pixelColor = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -52,6 +54,9 @@ export default class Coderunner {
         this.dotsColorButton = document.getElementById('dots-color-button');
         this.colorPicker = document.getElementById('color-picker-container');
         this.xClose = document.getElementById('x-close');
+        this.scanDestination = document.getElementById('scan-destination');
+        this.pixelColor = document.getElementById('pixel-color');
+        this.bgpColor = document.getElementById('bgp-color');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -61,7 +66,7 @@ export default class Coderunner {
 
     enableListeners(){
         window.addEventListener( 'resize', this.setScreenOrientation );
-        document.getElementById( 'scan-destination' ).addEventListener( 'keyup', this.scanDestinationChanged );
+        this.scanDestination.addEventListener( 'keyup', this.scanDestinationChanged );
         this.previewImage.addEventListener( 'load', this.previewImageLoaded );
         this.previewImage.addEventListener( 'error', this.previewImageError );
         this.nextButton.addEventListener( 'click', this.nextButtonClicked );
@@ -115,7 +120,7 @@ export default class Coderunner {
         else
             this.nextButton.style.display = 'block';       
 
-        if (e.target.value === '' && e.target.value === this.message) return;
+        if (e.target.value === '' || e.target.value === this.message) return;
         this.message = e.target.value;
 
         window.clearTimeout( this.throttle );
@@ -129,7 +134,7 @@ export default class Coderunner {
     }
 
     sendNewOrder( params ){
-        if (this.currentStep < 3) { 
+        if (this.currentStep < 4) { 
             params.frameNumber = 1;
             params.anim = 'staticCodeOnly';
         }
@@ -267,6 +272,19 @@ export default class Coderunner {
         this.colorPicker.style.opacity = 0;
     }
 
+    colorSwatchClicked(type, e){
+        let color = e.target.getAttribute('color');
+        let input = null;
+        if (type === 'dots'){
+            input = this.pixelColor;
+        } else {
+            input = this.bgpColor;
+        }
+        input.value = color.replace('#','');
+        this.orderParamChanged();
+        this.xCloseClicked();
+    }
+
     buildColorPicker(type){
         let colorSwatches = document.getElementsByClassName('color-swatch');
         for (let i=colorSwatches.length-1;i>-1;i-=1){
@@ -279,6 +297,8 @@ export default class Coderunner {
             let swatch = document.createElement('DIV');
             swatch.className = 'color-swatch';
             swatch.style.backgroundColor = arr[i];
+            swatch.setAttribute('color', arr[i]);
+            swatch.addEventListener('click',this.colorSwatchClicked.bind(this, type));
             container.appendChild(swatch);
         }
 

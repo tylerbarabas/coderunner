@@ -247,11 +247,11 @@ div.color-picker-container {
         padding: 40px;
 
         .color-swatch{
-            background-color: blue;
             height: 18%;
             width: 18%;
             display: inline-block;
             margin: 15px;
+            cursor: pointer;
         }
 
         .x-close {
