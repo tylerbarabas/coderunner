@@ -18,7 +18,7 @@ export default class Coderunner {
         this.progressBar = null;
         this.nextButton = null;
         this.prevButton = null;
-        this.shapeSelector = null;
+//        this.shapeSelector = null;
         this.backgroundColorButton = null;
         this.dotsColorButton = null;
         this.colorPicker = null;
@@ -49,7 +49,7 @@ export default class Coderunner {
         this.progressBar = document.getElementById('progress-bar-inner');
         this.nextButton = document.getElementById('next-button');
         this.prevButton = document.getElementById('prev-button');
-        this.shapeSelector = document.getElementById('shape');
+//        this.shapeSelector = document.getElementById('shape');
         this.backgroundColorButton = document.getElementById('background-color-button');
         this.dotsColorButton = document.getElementById('dots-color-button');
         this.colorPicker = document.getElementById('color-picker-container');
@@ -71,7 +71,7 @@ export default class Coderunner {
         this.previewImage.addEventListener( 'error', this.previewImageError );
         this.nextButton.addEventListener( 'click', this.nextButtonClicked );
         this.prevButton.addEventListener( 'click', this.prevButtonClicked );
-        this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
+//        this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
         this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.dotsColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.xClose.addEventListener( 'click', this.xCloseClicked );
@@ -302,11 +302,11 @@ export default class Coderunner {
             container.appendChild(swatch);
         }
 
-        let bgColor = 'rgba(255,255,255,0.8)';
-        let xColor = 'rgba(0,0,0,1)';
+        let bgColor = 'rgba(0,0,0,0.8)';
+        let xColor = 'rgba(255,255,255,1)';
         if (type === 'dots') {
-            bgColor = 'rgba(0,0,0,0.8)';
-            xColor = 'rgba(255,255,255,1)';
+            bgColor = 'rgba(255,255,255,0.8)';
+            xColor = 'rgba(0,0,0,1)';
         }
         container.parentNode.style.backgroundColor = bgColor;
         this.xClose.style.color = xColor;
