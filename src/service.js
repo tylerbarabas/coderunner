@@ -1,4 +1,5 @@
 export const domain = 'https://api.acme.codes';
+export const imghost = 'https://acme.codes';
 
 export function serializeParams( params ){
     return Object.keys( params ).map(function( key ) {
@@ -20,3 +21,11 @@ export async function checkProgress( orderNumber ){
     let res = await fetch( domain + '/orders/' + orderNumber + '/progress');
     return await res.json();
 }
+
+export async function uploadImage(formData) {
+    let res = await fetch( imghost + '/coderunner/upload', {
+        method: 'POST',
+        body: formData
+    });
+    return await res.json();
+} 

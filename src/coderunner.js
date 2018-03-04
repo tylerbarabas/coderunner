@@ -349,6 +349,9 @@ export default class Coderunner {
     }
 
     customImageInputChanged(e){
-        console.log('customImageInputChanged', e);
+        let formData = new FormData();
+        formData.append( 'file', e.target.files[0] );
+        let res = Service.uploadImage( formData );
+        console.log('file uploaded', res);
     }
 }
