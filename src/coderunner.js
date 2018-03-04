@@ -12,6 +12,7 @@ export default class Coderunner {
         this.currentStep = null;
         this.message = null;
         this.preloadedImages = null;
+        this.tryLoadingCount = null;
 
         //Elements
         this.previewImage = null;
@@ -29,6 +30,7 @@ export default class Coderunner {
         this.pixelColor = null;
         this.customImageButton = null;
         this.customImageInput = null;
+        this.img1 = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -49,6 +51,7 @@ export default class Coderunner {
         this.currentStep = 1;
         this.message = '';
         this.preloadedImages = [];
+        this.tryLoadingCount = 0;
 
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
@@ -65,6 +68,7 @@ export default class Coderunner {
         this.bgpColor = document.getElementById('bgp-color');
         this.customImageButton = document.getElementById('upload-file-button');
         this.customImageInput = document.getElementById('custom-image');
+        this.img1 = document.getElementById('img1');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -204,11 +208,17 @@ export default class Coderunner {
     preloadImage( src ){
         let img = new Image();
         img.addEventListener('load', () => {
+            this.tryLoadingCount = 0;
             this.preloadedImages.push( src );
             this.showNextPreview( src );
         });
         img.addEventListener('error', () => {
-            img.src = src;
+            this.tryLoadingCount += 1;
+            if (this.tryLoadingCount > 50) {
+                throw "Could not load image " + src;
+            } else {
+                img.src = src;
+            }
         });
         img.src = src;
     }
@@ -348,10 +358,12 @@ export default class Coderunner {
         this.customImageInput.click();
     }
 
-    customImageInputChanged(e){
+    async customImageInputChanged(e){
         let formData = new FormData();
         formData.append( 'file', e.target.files[0] );
-        let res = Service.uploadImage( formData );
-        console.log('file uploaded', res);
+        let res = await Service.uploadImage( formData );
+        let fullpath = Service.imghost + res.filepath;
+        this.img1.value = fullpath;
+        this.showNextPreview( fullpath );
     }
 }
