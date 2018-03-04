@@ -81,6 +81,11 @@ img.preview-img {
 
     width: 100%;
     height: 100%;
+
+    &.custom-image-preview{
+        opacity: 0.5;
+        display: none;
+    }
 }
 
 div.preview-overlay {

@@ -30,6 +30,7 @@ export default class Coderunner {
         this.pixelColor = null;
         this.customImageButton = null;
         this.customImageInput = null;
+        this.customImagePreview = null;
         this.img1 = null;
 
         //Events
@@ -68,6 +69,7 @@ export default class Coderunner {
         this.bgpColor = document.getElementById('bgp-color');
         this.customImageButton = document.getElementById('upload-file-button');
         this.customImageInput = document.getElementById('custom-image');
+        this.customImagePreview = document.getElementById('custom-image-preview');
         this.img1 = document.getElementById('img1');
 
         this.getAnimations();
@@ -114,6 +116,8 @@ export default class Coderunner {
         this.previewImage.style.width = null; 
         this.previewOverlay.style.height = null;
         this.previewOverlay.style.width = null;
+        this.customImagePreview.style.width = null;
+        this.customImagePreview.style.height = null;
 
         let height = this.previewImage.offsetHeight;
         let width = this.previewImage.offsetWidth;
@@ -126,6 +130,10 @@ export default class Coderunner {
         this.previewOverlay.style.height = smaller+'px';
         this.previewOverlay.style.width = smaller+'px';
         this.previewOverlay.style.left = 'calc(50% - ' + smaller/2+'px)';
+
+        this.customImagePreview.style.height = smaller+'px';
+        this.customImagePreview.style.width = smaller+'px';
+        this.customImagePreview.style.left = 'calc(50% - ' + smaller/2+'px)';
     }
 
     scanDestinationChanged( e ) {
@@ -201,16 +209,26 @@ export default class Coderunner {
             this.previewImage.src = src;
             this.previewImage.style.opacity = 1;
         } else {
-            this.preloadImage( src );
+            this.preloadImage( src, this.showNextPreview.bind( this ) );
         }
     }
 
-    preloadImage( src ){
+    showCustomImagePreview( src ) {
+        let index = this.preloadedImages.indexOf( src );
+        if (index !== -1) {
+            this.customImagePreview.src = src;
+            this.customImagePreview.style.display = 'block';
+        } else {
+            this.preloadImage( src, this.showCustomImagePreview.bind( this ) );
+        }
+    }
+
+    preloadImage( src, cb ){
         let img = new Image();
         img.addEventListener('load', () => {
             this.tryLoadingCount = 0;
             this.preloadedImages.push( src );
-            this.showNextPreview( src );
+            cb( src );
         });
         img.addEventListener('error', () => {
             this.tryLoadingCount += 1;
@@ -364,6 +382,6 @@ export default class Coderunner {
         let res = await Service.uploadImage( formData );
         let fullpath = Service.imghost + res.filepath;
         this.img1.value = fullpath;
-        this.showNextPreview( fullpath );
+        this.showCustomImagePreview( fullpath );
     }
 }
