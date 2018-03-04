@@ -11,6 +11,7 @@ export default class Coderunner {
         this.throttle = null; 
         this.currentStep = null;
         this.message = null;
+        this.preloadedImages = null;
 
         //Elements
         this.previewImage = null;
@@ -43,6 +44,7 @@ export default class Coderunner {
     init(){
         this.currentStep = 1;
         this.message = '';
+        this.preloadedImages = [];
 
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
@@ -140,9 +142,12 @@ export default class Coderunner {
         }
         Service.newOrder( params ).then( res => {
             this.orderNumber = res.orderNumber;
-            if ( this.progressLoop !== null ) this.stopProgressLoop();
-            this.stopProgressLoop();
-            this.startProgressLoop();
+            //if ( this.progressLoop !== null ) this.stopProgressLoop();
+            if (params.anim === 'staticCodeOnly') {
+                this.showNextPreview( Service.domain + '/orders/' + this.orderNumber + '/frames/1' );
+            } else {
+                this.startProgressLoop();
+            }
         });
     }
 
@@ -156,7 +161,6 @@ export default class Coderunner {
                 this.getProgress();
             } else {
                 this.stopProgressLoop();
-                this.showFirstFrame();
             }
         }, 1000);
     }
@@ -164,6 +168,7 @@ export default class Coderunner {
     stopProgressLoop(){
         window.clearInterval( this.progressLoop );
         this.progressLoop = null;
+        this.showNextPreview( Service.domain + '/orders/' + this.orderNumber );
     }
 
     getProgress( orderNumber = this.orderNumber ) {
@@ -177,8 +182,28 @@ export default class Coderunner {
         this.progressBar.style.width = this.progress + '%';
     }
 
-    showFirstFrame(){
-        this.previewImage.src = Service.domain + '/orders/' + this.orderNumber + '/frames/1';
+    showNextPreview( src ){
+        let index = this.preloadedImages.indexOf( src );;
+        this.previewImage.style.opacity = 0.5;
+        if (index !== -1) {
+            this.previewImage.src = src;
+            this.previewImage.style.opacity = 1;
+        } else {
+            this.preloadImage( src );
+        }
+    }
+
+    preloadImage( src ){
+        let img = new Image();
+        img.addEventListener('load', () => {
+            console.log('image loaded');
+            this.preloadedImages.push( src );
+            this.showNextPreview( src );
+        });
+        img.addEventListener('error', () => {
+            img.src = src;
+        });
+        img.src = src;
     }
 
     isImageOk( img = this.previewImage ) {
@@ -187,7 +212,11 @@ export default class Coderunner {
     }
 
     previewImageLoaded(){
-        this.hidePreviewOverlay();
+        this.previewImage.style.opacity = 1;
+    }
+
+    previewImageError(){
+        this.showNextPreview();
     }
 
     showPreviewOverlay(){
@@ -198,10 +227,6 @@ export default class Coderunner {
         if (this.previewOverlay.className.search(/hide/) === -1) {
             this.previewOverlay.className = this.previewOverlay.className + ' hide';
         }
-    }
-
-    previewImageError(){
-        this.showFirstFrame();
     }
 
     nextButtonClicked(){
