@@ -31,6 +31,7 @@ export default class Coderunner {
         this.customImageButton = null;
         this.customImageInput = null;
         this.customImagePreview = null;
+        this.removeCustomImageButton = null;
         this.img1 = null;
 
         //Events
@@ -46,6 +47,7 @@ export default class Coderunner {
         this.xCloseClicked = this.xCloseClicked.bind(this);
         this.customImageButtonClicked = this.customImageButtonClicked.bind(this);
         this.customImageInputChanged = this.customImageInputChanged.bind(this);
+        this.removeCustomImageButtonClicked = this.removeCustomImageButtonClicked.bind(this);
     }
 
     init(){
@@ -70,6 +72,7 @@ export default class Coderunner {
         this.customImageButton = document.getElementById('upload-file-button');
         this.customImageInput = document.getElementById('custom-image');
         this.customImagePreview = document.getElementById('custom-image-preview');
+        this.removeCustomImageButton = document.getElementById('remove-custom-image');
         this.img1 = document.getElementById('img1');
 
         this.getAnimations();
@@ -91,6 +94,7 @@ export default class Coderunner {
         this.xClose.addEventListener( 'click', this.xCloseClicked );
         this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
         this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
+        this.removeCustomImageButton.addEventListener( 'click', this.removeCustomImageButtonClicked );
     }
 
     getAnimations(){ 
@@ -383,5 +387,12 @@ export default class Coderunner {
         let fullpath = Service.imghost + res.filepath;
         this.img1.value = fullpath;
         this.showCustomImagePreview( fullpath );
+        this.removeCustomImageButton.style.display = 'block';
+    }
+
+    removeCustomImageButtonClicked(){
+        this.customImagePreview.style.display = 'none';
+        this.removeCustomImageButton.style.display = 'none';
+        this.img1.value = null;
     }
 }

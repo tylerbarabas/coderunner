@@ -88,6 +88,20 @@ img.preview-img {
     }
 }
 
+div.remove-custom-image {
+    height: 50px;
+    width: 200px;
+    background-color: #ed603a;
+    color: white;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    line-height: 50px;
+    cursor: pointer;
+    border-radius: 15px;
+    display: none;
+}
+
 div.preview-overlay {
     position: absolute;
     top: 0;
