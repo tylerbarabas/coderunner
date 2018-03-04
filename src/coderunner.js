@@ -27,6 +27,8 @@ export default class Coderunner {
         this.scanDestination = null;
         this.bgpColor = null;
         this.pixelColor = null;
+        this.customImageButton = null;
+        this.customImageInput = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -39,6 +41,8 @@ export default class Coderunner {
         this.orderParamChanged = this.orderParamChanged.bind(this);
         this.colorButtonClicked = this.colorButtonClicked.bind(this);
         this.xCloseClicked = this.xCloseClicked.bind(this);
+        this.customImageButtonClicked = this.customImageButtonClicked.bind(this);
+        this.customImageInputChanged = this.customImageInputChanged.bind(this);
     }
 
     init(){
@@ -59,6 +63,8 @@ export default class Coderunner {
         this.scanDestination = document.getElementById('scan-destination');
         this.pixelColor = document.getElementById('pixel-color');
         this.bgpColor = document.getElementById('bgp-color');
+        this.customImageButton = document.getElementById('upload-file-button');
+        this.customImageInput = document.getElementById('custom-image');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -77,6 +83,8 @@ export default class Coderunner {
         this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.dotsColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.xClose.addEventListener( 'click', this.xCloseClicked );
+        this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
+        this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
     }
 
     getAnimations(){ 
@@ -196,7 +204,6 @@ export default class Coderunner {
     preloadImage( src ){
         let img = new Image();
         img.addEventListener('load', () => {
-            console.log('image loaded');
             this.preloadedImages.push( src );
             this.showNextPreview( src );
         });
@@ -335,5 +342,13 @@ export default class Coderunner {
         }
         container.parentNode.style.backgroundColor = bgColor;
         this.xClose.style.color = xColor;
+    }
+
+    customImageButtonClicked(){
+        this.customImageInput.click();
+    }
+
+    customImageInputChanged(e){
+        console.log('customImageInputChanged', e);
     }
 }
