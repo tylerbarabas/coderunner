@@ -12,6 +12,11 @@ export async function getAnimsJson(){
     return await res.json();
 }
 
+export async function getColorsJson(){
+	let res = await fetch( domain + '/color-palettes-json' );
+	return await res.json();
+}
+
 export async function newOrder( params ){
     let res = await fetch( domain + '/new?' + serializeParams( params ));
     return await res.json();

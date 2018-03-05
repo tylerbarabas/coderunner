@@ -13,6 +13,7 @@ export default class Coderunner {
         this.message = null;
         this.preloadedImages = null;
         this.tryLoadingCount = null;
+        this.colorPalettes = null;
 
         //Elements
         this.previewImage = null;
@@ -55,6 +56,7 @@ export default class Coderunner {
         this.message = '';
         this.preloadedImages = [];
         this.tryLoadingCount = 0;
+        this.colorPalettes = {};
 
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
@@ -100,6 +102,11 @@ export default class Coderunner {
     getAnimations(){ 
         Service.getAnimsJson().then( json => {
             this.animations = json;
+        });
+
+	Service.getColorsJson().then( json => {
+            this.colorPalettes = json;
+            console.log('this.colorPalettes', this.colorPalettes);
         });
     }
 
@@ -329,7 +336,7 @@ export default class Coderunner {
     }
 
     openColorPicker(){
-        this.colorPicker.style.opacity = 1;
+        this.colorPicker.style.opacity = 0.5;
     }
 
     closeColorPicker(){
@@ -356,7 +363,7 @@ export default class Coderunner {
         }
 
         let container = document.getElementById('color-picker');
-        let arr = colors[type];
+        let arr = this.colorPalettes[type];
         for (let i=0;i<arr.length;i+=1){
             let swatch = document.createElement('DIV');
             swatch.className = 'color-swatch';
