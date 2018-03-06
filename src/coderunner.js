@@ -14,6 +14,7 @@ export default class Coderunner {
         this.preloadedImages = null;
         this.tryLoadingCount = null;
         this.colorPalettes = null;
+        this.customImageInterval = null;
 
         //Elements
         this.previewImage = null;
@@ -225,6 +226,11 @@ export default class Coderunner {
         if (index !== -1) {
             this.customImagePreview.src = src;
             this.customImagePreview.style.display = 'block';
+            clearInterval(this.customImageInterval);
+            this.customImageInterval = setInterval(()=>{
+                let opacity = parseFloat( this.customImagePreview.style.opacity );
+                this.customImagePreview.style.opacity = ( opacity === 0.9 ) ? 0.1 : 0.9;
+            },1000);
         } else {
             this.preloadImage( src, this.showCustomImagePreview.bind( this ) );
         }
