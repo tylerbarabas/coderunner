@@ -336,10 +336,12 @@ export default class Coderunner {
     }
 
     openColorPicker(){
-        this.colorPicker.style.opacity = 0.5;
+        this.colorPicker.style.opacity = 1;
+        this.colorPicker.style.left = '0px';
     }
 
     closeColorPicker(){
+        this.colorPicker.style.left = '-1000px';
         this.colorPicker.style.opacity = 0;
     }
 
