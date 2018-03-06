@@ -101,11 +101,12 @@ export default class Coderunner {
     getAnimations(){ 
         Service.getAnimsJson().then( json => {
             this.animations = json;
+            let orientation = ( window.innerHeight > window.innerWidth ) ? 'portrait' : 'landscape';
+            this.populateAnimationSelector( orientation );
         });
 
 	Service.getColorsJson().then( json => {
             this.colorPalettes = json;
-            console.log('this.colorPalettes', this.colorPalettes);
         });
     }
 
@@ -121,6 +122,7 @@ export default class Coderunner {
         let h = (orientation === 'landscape') ? 1 : 0.5;
         let subtract = (orientation === 'landscape') ? 150 : 130;
         this.animationContainer.style.height = `${(window.innerHeight * h) - subtract}px`;
+        this.populateAnimationSelector( orientation );
 
         window.setTimeout( this.makePreviewSquare, 0 );
     }
@@ -404,5 +406,21 @@ export default class Coderunner {
         let fullpath = Service.imghost + res.filepath;
         this.img1.value = fullpath;
         this.showCustomImagePreview( fullpath );
+    }
+
+    populateAnimationSelector( orientation ){
+        this.animationContainer.innerHTML = '';
+        let d = ( orientation === 'landscape' ) ? 8 : 4;
+        let length = ( window.innerWidth / d ) - 30;
+        for (let i in this.animations) {
+            let a = this.animations[i];
+            let box = document.createElement('DIV');
+            box.className = 'animation-box';
+            box.id = 'animation-box-'+i;
+            box.style.width = `${length}px`;
+            box.style.height = `${length}px`;
+            box.style.backgroundImage = `url(${Service.domain}/anims/${i}/thumbnails/anim)`;
+            this.animationContainer.appendChild( box );
+        }
     }
 }

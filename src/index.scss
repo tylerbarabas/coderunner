@@ -292,6 +292,22 @@ div.color-picker-container {
 div.animation-container {
     margin-bottom: 35px;
     background-color: #222c4b;
+    overflow-y: scroll;
+    text-align: left;
+    padding-left: 25px;
+    padding-top: 10px;
+
+    div.animation-box {
+        border: 1px solid #ffffff;
+        display: inline-block;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
 }
 
 // FONTS
