@@ -34,6 +34,7 @@ export default class Coderunner {
         this.customImageInput = null;
         this.customImagePreview = null;
         this.img1 = null;
+        this.animationContainer = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -74,6 +75,7 @@ export default class Coderunner {
         this.customImageInput = document.getElementById('custom-image');
         this.customImagePreview = document.getElementById('custom-image-preview');
         this.img1 = document.getElementById('img1');
+        this.animationContainer = document.getElementById('animation-container');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -115,6 +117,9 @@ export default class Coderunner {
             c.className = c.className.split(' portrait')[0].split(' landscape')[0];
             c.className += ' ' + orientation;
         }
+
+        let animationContainerHeight = (orientation === 'landscape') ? 0.8 : 0.25;
+        this.animationContainer.style.height = `${window.innerHeight * animationContainerHeight}px`;
 
         window.setTimeout( this.makePreviewSquare, 0 );
     }
