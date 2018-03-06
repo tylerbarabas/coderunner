@@ -118,8 +118,9 @@ export default class Coderunner {
             c.className += ' ' + orientation;
         }
 
-        let animationContainerHeight = (orientation === 'landscape') ? 0.8 : 0.25;
-        this.animationContainer.style.height = `${window.innerHeight * animationContainerHeight}px`;
+        let h = (orientation === 'landscape') ? 1 : 0.5;
+        let subtract = (orientation === 'landscape') ? 150 : 130;
+        this.animationContainer.style.height = `${(window.innerHeight * h) - subtract}px`;
 
         window.setTimeout( this.makePreviewSquare, 0 );
     }
