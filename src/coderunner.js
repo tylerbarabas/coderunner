@@ -35,6 +35,7 @@ export default class Coderunner {
         this.customImagePreview = null;
         this.img1 = null;
         this.animationContainer = null;
+        this.anim = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -76,6 +77,7 @@ export default class Coderunner {
         this.customImagePreview = document.getElementById('custom-image-preview');
         this.img1 = document.getElementById('img1');
         this.animationContainer = document.getElementById('animation-container');
+        this.anim = document.getElementById('anim');
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -239,6 +241,7 @@ export default class Coderunner {
                 let opacity = parseFloat( this.customImagePreview.style.opacity );
                 this.customImagePreview.style.opacity = ( opacity === 0.9 ) ? 0.1 : 0.9;
             },1000);
+            this.nextButton.style.display = 'block';
         } else {
             this.preloadImage( src, this.showCustomImagePreview.bind( this ) );
         }
@@ -314,7 +317,10 @@ export default class Coderunner {
             this.prevButton.style.display = 'block';
         }
  
-        if (this.message === '' || this.currentStep >= allSteps.length) {
+        if (this.message === '' 
+            || ( this.currentStep === 3 && this.img1.value === '' )
+            || ( this.currentStep === 4 && this.anim.value === '' )
+            || this.currentStep >= allSteps.length ) {
             this.nextButton.style.display = 'none';
         } else {
             this.nextButton.style.display = 'block';
@@ -412,14 +418,29 @@ export default class Coderunner {
         this.animationContainer.innerHTML = '';
         let d = ( orientation === 'landscape' ) ? 8 : 4;
         let length = ( window.innerWidth / d ) - 30;
+
         for (let i in this.animations) {
             let a = this.animations[i];
+            let arr = i.split('_');
+            let formattedName = arr[arr.length-1];
+            let nameText = document.createElement('DIV');
+            nameText.innerText = formattedName;
+            nameText.className = 'animation-text';
+            nameText.style.fontSize = `${length / 11}px`;
+            let priceText = document.createElement('DIV');
+            priceText.innerText = `$${a.price}`;
+            priceText.className = 'price-text';
+            priceText.style.fontSize = `${length / 8}px`;
+
             let box = document.createElement('DIV');
             box.className = 'animation-box';
             box.id = 'animation-box-'+i;
             box.style.width = `${length}px`;
             box.style.height = `${length}px`;
             box.style.backgroundImage = `url(${Service.domain}/anims/${i}/thumbnails/anim)`;
+
+            box.appendChild( nameText );
+            box.appendChild( priceText );
             this.animationContainer.appendChild( box );
         }
     }
