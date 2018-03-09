@@ -36,6 +36,7 @@ export default class Coderunner {
         this.img1 = null;
         this.animationContainer = null;
         this.anim = null;
+        this.animationBoxes = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -78,6 +79,7 @@ export default class Coderunner {
         this.img1 = document.getElementById('img1');
         this.animationContainer = document.getElementById('animation-container');
         this.anim = document.getElementById('anim');
+        this.animationBoxes = [];
 
         this.getAnimations();
         this.setScreenOrientation();
@@ -180,16 +182,17 @@ export default class Coderunner {
         }
         Service.newOrder( params ).then( res => {
             this.orderNumber = res.orderNumber;
-            //if ( this.progressLoop !== null ) this.stopProgressLoop();
             if (params.anim === 'staticCodeOnly') {
                 this.showNextPreview( Service.domain + '/orders/' + this.orderNumber + '/frames/1' );
             } else {
+                if ( this.progressLoop !== null ) this.stopProgressLoop();
                 this.startProgressLoop();
             }
         });
     }
 
     startProgressLoop(){
+        this.nextButton.style.display = 'none';
         this.progress = 0;
         this.setProgressBar();
         this.showPreviewOverlay();
@@ -199,6 +202,7 @@ export default class Coderunner {
                 this.getProgress();
             } else {
                 this.stopProgressLoop();
+                this.showNextPreview( Service.domain + '/orders/' + this.orderNumber + '/gif' );
             }
         }, 1000);
     }
@@ -206,7 +210,6 @@ export default class Coderunner {
     stopProgressLoop(){
         window.clearInterval( this.progressLoop );
         this.progressLoop = null;
-        this.showNextPreview( Service.domain + '/orders/' + this.orderNumber );
     }
 
     getProgress( orderNumber = this.orderNumber ) {
@@ -221,14 +224,22 @@ export default class Coderunner {
     }
 
     showNextPreview( src ){
-        let index = this.preloadedImages.indexOf( src );;
+        let index = this.preloadedImages.indexOf( src );
         this.previewImage.style.opacity = 0.5;
         if (index !== -1) {
             this.previewImage.src = src;
             this.previewImage.style.opacity = 1;
+            this.hideCustomImagePreview();
+            this.hidePreviewOverlay();
+            this.nextButton.style.display = 'block';
         } else {
             this.preloadImage( src, this.showNextPreview.bind( this ) );
         }
+    }
+
+    hideCustomImagePreview() {
+        clearInterval(this.customImageInterval);
+        this.customImagePreview.style.opacity = 0;
     }
 
     showCustomImagePreview( src ) {
@@ -416,6 +427,8 @@ export default class Coderunner {
 
     populateAnimationSelector( orientation ){
         this.animationContainer.innerHTML = '';
+        this.animationBoxes = [];
+
         let d = ( orientation === 'landscape' ) ? 8 : 4;
         let length = ( window.innerWidth / d ) - 30;
 
@@ -439,9 +452,28 @@ export default class Coderunner {
             box.style.height = `${length}px`;
             box.style.backgroundImage = `url(${Service.domain}/anims/${i}/thumbnails/anim)`;
 
+            box.addEventListener('click', this.animationBoxClicked.bind(this));
+            this.animationBoxes.push( box );
+            box.setAttribute('anim', i);
+
             box.appendChild( nameText );
             box.appendChild( priceText );
             this.animationContainer.appendChild( box );
+        }
+    }
+
+    animationBoxClicked(e){
+        for (let i=0;i<this.animationBoxes.length;i+=1){
+            let a = this.animationBoxes[i];
+            if (a.className.indexOf('selected') !== -1) a.className = a.className.split(' selected')[0];
+        }
+        e.target.className += ' selected';
+        let input = document.getElementById('anim');
+        let anim = e.target.getAttribute('anim');
+        this.nextButton.style.display = 'block';
+        if (anim !== input.value) {
+            input.value = anim;
+            this.orderParamChanged();
         }
     }
 }

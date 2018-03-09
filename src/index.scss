@@ -88,20 +88,6 @@ img.preview-img {
     }
 }
 
-div.remove-custom-image {
-    height: 50px;
-    width: 200px;
-    background-color: #ed603a;
-    color: white;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    line-height: 50px;
-    cursor: pointer;
-    border-radius: 15px;
-    display: none;
-}
-
 div.preview-overlay {
     position: absolute;
     top: 0;
@@ -110,10 +96,12 @@ div.preview-overlay {
     height: 100%;
     width: 100%;
     background-color: rgba(0,0,0,0.5);
-    animation: 500ms all;
+    transition: 1000ms opacity;
+
+    opacity: 1;
 
     &.hide{
-        display: none;
+        opacity: 0;
     }
 }
 
@@ -309,6 +297,10 @@ div.animation-container {
         background-position: center;
         background-repeat: no-repeat;
         text-align: center;
+
+        &.selected{
+            border: 1px solid #f7f000;
+        }
 
         .animation-text {
             position: absolute;
