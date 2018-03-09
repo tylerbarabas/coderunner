@@ -11,6 +11,8 @@ export default class Coderunner {
         this.throttle = null; 
         this.currentStep = null;
         this.message = null;
+        this.preloadingImages = null;
+        this.preloadingBacklog = null;
         this.preloadedImages = null;
         this.tryLoadingCount = null;
         this.colorPalettes = null;
@@ -56,6 +58,8 @@ export default class Coderunner {
     init(){
         this.currentStep = 1;
         this.message = '';
+        this.preloadingBacklog = [];
+        this.preloadingImages = [];
         this.preloadedImages = [];
         this.tryLoadingCount = 0;
         this.colorPalettes = {};
@@ -106,6 +110,10 @@ export default class Coderunner {
         Service.getAnimsJson().then( json => {
             this.animations = json;
             let orientation = ( window.innerHeight > window.innerWidth ) ? 'portrait' : 'landscape';
+            Object.keys( this.animations ).map( a => {
+                let thumb = `${Service.domain}/anims/${a}/thumbnails/anim`;
+                return this.preloadImage(thumb);
+            });
             this.populateAnimationSelector( orientation );
         });
 
@@ -258,22 +266,31 @@ export default class Coderunner {
         }
     }
 
-    preloadImage( src, cb ){
-        let img = new Image();
-        img.addEventListener('load', () => {
-            this.tryLoadingCount = 0;
-            this.preloadedImages.push( src );
-            cb( src );
-        });
-        img.addEventListener('error', () => {
-            this.tryLoadingCount += 1;
-            if (this.tryLoadingCount > 50) {
-                throw "Could not load image " + src;
-            } else {
-                img.src = src;
-            }
-        });
-        img.src = src;
+    preloadImage( src, cb = null ) {
+        let backlogIndex = this.preloadingBacklog.indexOf( src );
+        if (this.preloadingImages.length < 3 || src.indexOf('order') !== -1) {
+            if (backlogIndex !== -1) this.preloadingBacklog.splice( backlogIndex, 1 );
+            this.preloadingImages.push( src );
+            let img = new Image();
+            img.addEventListener('load', () => {
+                this.tryLoadingCount = 0;
+                this.preloadedImages.push( src );
+                this.preloadingImages.splice( this.preloadingImages.indexOf(src),1 );
+                if (this.preloadingBacklog.length > 0) this.preloadImage( this.preloadingBacklog[0] );
+                if (typeof cb === 'function') cb( src );
+            });
+            img.addEventListener('error', () => {
+                this.tryLoadingCount += 1;
+                if (this.tryLoadingCount > 50) {
+                    throw "Could not load image " + src;
+                } else {
+                    img.src = src;
+                }
+            });
+            img.src = src;
+        } else {
+            if (backlogIndex === -1) this.preloadingBacklog.push( src );
+        }
     }
 
     isImageOk( img = this.previewImage ) {
@@ -470,7 +487,6 @@ export default class Coderunner {
         e.target.className += ' selected';
         let input = document.getElementById('anim');
         let anim = e.target.getAttribute('anim');
-        this.nextButton.style.display = 'block';
         if (anim !== input.value) {
             input.value = anim;
             this.orderParamChanged();
