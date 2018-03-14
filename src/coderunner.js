@@ -1,3 +1,4 @@
+import braintree from 'braintree-web-drop-in';
 import formSerialize from 'form-serialize';
 import * as Service from './service';
 import colors from 'colors.json';
@@ -39,6 +40,7 @@ export default class Coderunner {
         this.animationContainer = null;
         this.anim = null;
         this.animationBoxes = null;
+        this.submitPayment = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -85,8 +87,9 @@ export default class Coderunner {
         this.animationContainer = document.getElementById('animation-container');
         this.anim = document.getElementById('anim');
         this.animationBoxes = [];
+        this.submitPayment = document.getElementById('submit-payment');
 
-        this.getAnimations();
+        this.getInitData();
         this.setScreenOrientation();
         this.enableListeners();
         this.refreshStep();
@@ -106,22 +109,36 @@ export default class Coderunner {
         this.xClose.addEventListener( 'click', this.xCloseClicked );
         this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
         this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
-        
     }
 
-    getAnimations(){ 
+    getInitData(){
         Service.getAnimsJson().then( json => {
             this.animations = json;
             let orientation = ( window.innerHeight > window.innerWidth ) ? 'portrait' : 'landscape';
             Object.keys( this.animations ).map( a => {
-                let thumb = `${Service.imghost}/anims/${a}/thumbnails/anim.gif`;
+                let thumb = `${Service.production}/anims/${a}/thumbnails/anim.gif`;
                 return this.preloadImage(thumb);
             });
             this.populateAnimationSelector( orientation );
         });
 
-	Service.getColorsJson().then( json => {
+	    Service.getColorsJson().then( json => {
             this.colorPalettes = json;
+        });
+
+        //https://www.npmjs.com/package/braintree-web-drop-in
+        Service.getClientToken().then( json => {
+            braintree.create({
+                authorization: json.clientToken,
+                selector: '#braintree-widget'
+            },function (err, dropinInstance){
+                if (err) {
+                    // Handle any errors that might've occurred when creating Drop-in
+                    console.error(err);
+                    return;
+                }
+                this.submitPayment.addEventListener( 'click', this.submitPaymentClicked.bind( this, dropinInstance ) );
+            }.bind(this));
         });
     }
 
@@ -193,7 +210,7 @@ export default class Coderunner {
         Service.newOrder( params ).then( res => {
             this.orderNumber = res.orderNumber;
             if (params.anim === 'staticCodeOnly') {
-                this.showNextPreview( Service.domain + '/orders/' + this.orderNumber + '/frames/1' );
+                this.showNextPreview( Service.api + '/orders/' + this.orderNumber + '/frames/1' );
             } else {
                 if ( this.progressLoop !== null ) this.stopProgressLoop();
                 this.startProgressLoop();
@@ -212,7 +229,7 @@ export default class Coderunner {
                 this.getProgress();
             } else {
                 this.stopProgressLoop();
-                this.showNextPreview( Service.domain + '/orders/' + this.orderNumber + '/gif' );
+                this.showNextPreview( Service.api + '/orders/' + this.orderNumber + '/gif' );
             }
         }, 1000);
     }
@@ -440,7 +457,7 @@ export default class Coderunner {
         let formData = new FormData();
         formData.append( 'file', e.target.files[0] );
         let res = await Service.uploadImage( formData );
-        let fullpath = Service.imghost + res.filepath;
+        let fullpath = Service.production + res.filepath;
         this.img1.value = fullpath;
         this.showCustomImagePreview( fullpath );
     }
@@ -470,7 +487,7 @@ export default class Coderunner {
             box.id = 'animation-box-'+i;
             box.style.width = `${length}px`;
             box.style.height = `${length}px`;
-            box.style.backgroundImage = `url(${Service.imghost}/anims/${i}/thumbnails/anim.gif)`;
+            box.style.backgroundImage = `url(${Service.production}/anims/${i}/thumbnails/anim.gif)`;
 
             box.addEventListener('click', this.animationBoxClicked.bind(this));
             this.animationBoxes.push( box );
@@ -494,5 +511,17 @@ export default class Coderunner {
             input.value = anim;
             this.orderParamChanged();
         }
+    }
+
+    submitPaymentClicked(dropinInstance){
+        dropinInstance.requestPaymentMethod(function (err, payload) {
+            if (err) {
+                // Handle errors in requesting payment method
+                console.error(err);
+            }
+
+            // Send payload.nonce to your server
+            console.log('payload', payload);
+        });
     }
 }

@@ -55,6 +55,7 @@
     "webpack-merge": "4.1.0"
   },
   "dependencies": {
+    "braintree-web-drop-in": "^1.10.0",
     "font-awesome": "^4.7.0",
     "font-awesome-sass-loader": "^2.0.1",
     "form-serialize": "^0.7.2"
