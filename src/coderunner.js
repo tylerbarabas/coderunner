@@ -64,6 +64,7 @@ export default class Coderunner {
         this.tryLoadingCount = 0;
         this.colorPalettes = {};
 
+        this.form = document.getElementById('form');
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
         this.progressBar = document.getElementById('progress-bar-inner');
@@ -93,6 +94,7 @@ export default class Coderunner {
 
     enableListeners(){
         window.addEventListener( 'resize', this.setScreenOrientation );
+        this.form.addEventListener( 'submit', e=>{e.preventDefault();});
         this.scanDestination.addEventListener( 'keyup', this.scanDestinationChanged );
         this.previewImage.addEventListener( 'load', this.previewImageLoaded );
         this.previewImage.addEventListener( 'error', this.previewImageError );
@@ -104,6 +106,7 @@ export default class Coderunner {
         this.xClose.addEventListener( 'click', this.xCloseClicked );
         this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
         this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
+        
     }
 
     getAnimations(){ 
@@ -111,7 +114,7 @@ export default class Coderunner {
             this.animations = json;
             let orientation = ( window.innerHeight > window.innerWidth ) ? 'portrait' : 'landscape';
             Object.keys( this.animations ).map( a => {
-                let thumb = `${Service.domain}/anims/${a}/thumbnails/anim`;
+                let thumb = `${Service.imghost}/anims/${a}/thumbnails/anim.gif`;
                 return this.preloadImage(thumb);
             });
             this.populateAnimationSelector( orientation );
@@ -178,8 +181,7 @@ export default class Coderunner {
     }
 
     orderParamChanged(){
-        let form = document.getElementById('form-data');
-        let params = formSerialize(form, {hash: true});
+        let params = formSerialize(this.form, {hash: true});
         this.sendNewOrder( params );
     }
 
@@ -268,12 +270,13 @@ export default class Coderunner {
 
     preloadImage( src, cb = null ) {
         let backlogIndex = this.preloadingBacklog.indexOf( src );
-        if (this.preloadingImages.length < 3 || src.indexOf('order') !== -1) {
+        if (this.preloadingImages.length < 3 
+            || src.indexOf('order') !== -1
+            || src.indexOf('modules') !== -1) {
             if (backlogIndex !== -1) this.preloadingBacklog.splice( backlogIndex, 1 );
             this.preloadingImages.push( src );
             let img = new Image();
             img.addEventListener('load', () => {
-                this.tryLoadingCount = 0;
                 this.preloadedImages.push( src );
                 this.preloadingImages.splice( this.preloadingImages.indexOf(src),1 );
                 if (this.preloadingBacklog.length > 0) this.preloadImage( this.preloadingBacklog[0] );
@@ -288,7 +291,7 @@ export default class Coderunner {
                 }
             });
             img.src = src;
-        } else {
+        } else { 
             if (backlogIndex === -1) this.preloadingBacklog.push( src );
         }
     }
@@ -467,7 +470,7 @@ export default class Coderunner {
             box.id = 'animation-box-'+i;
             box.style.width = `${length}px`;
             box.style.height = `${length}px`;
-            box.style.backgroundImage = `url(${Service.domain}/anims/${i}/thumbnails/anim)`;
+            box.style.backgroundImage = `url(${Service.imghost}/anims/${i}/thumbnails/anim.gif)`;
 
             box.addEventListener('click', this.animationBoxClicked.bind(this));
             this.animationBoxes.push( box );
