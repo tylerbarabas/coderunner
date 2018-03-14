@@ -41,4 +41,16 @@ export async function getClientToken(){
         method: 'POST'
     } );
     return await res.json();
-} 
+}
+
+export async function processPayment(amount, nonce){
+    console.log('pp', amount, nonce);
+    let res = await fetch( stage + '/coderunner/process-payment', {
+        method: 'POST',
+        body: JSON.stringify({
+            amount,
+            nonce
+        })
+    } );
+    return await res.json();
+}

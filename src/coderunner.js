@@ -521,7 +521,10 @@ export default class Coderunner {
             }
 
             // Send payload.nonce to your server
-            console.log('payload', payload);
+            let amount = 1;
+            Service.processPayment( amount, payload.nonce ).then(json=>{
+                console.log('payment sent', json);
+            });
         });
     }
 }
