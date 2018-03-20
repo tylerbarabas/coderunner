@@ -18,6 +18,7 @@ export default class Coderunner {
         this.tryLoadingCount = null;
         this.colorPalettes = null;
         this.customImageInterval = null;
+        this.params = null;
 
         //Elements
         this.previewImage = null;
@@ -72,7 +73,7 @@ export default class Coderunner {
         this.progressBar = document.getElementById('progress-bar-inner');
         this.nextButton = document.getElementById('next-button');
         this.prevButton = document.getElementById('prev-button');
-//        this.shapeSelector = document.getElementById('shape');
+        //this.shapeSelector = document.getElementById('shape');
         this.backgroundColorButton = document.getElementById('background-color-button');
         this.dotsColorButton = document.getElementById('dots-color-button');
         this.colorPicker = document.getElementById('color-picker-container');
@@ -103,7 +104,7 @@ export default class Coderunner {
         this.previewImage.addEventListener( 'error', this.previewImageError );
         this.nextButton.addEventListener( 'click', this.nextButtonClicked );
         this.prevButton.addEventListener( 'click', this.prevButtonClicked );
-//        this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
+        //this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
         this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.dotsColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.xClose.addEventListener( 'click', this.xCloseClicked );
@@ -198,11 +199,11 @@ export default class Coderunner {
     }
 
     orderParamChanged(){
-        let params = formSerialize(this.form, {hash: true});
-        this.sendNewOrder( params );
+        this.params = formSerialize(this.form, {hash: true});
+        this.sendNewOrder( this.params );
     }
 
-    sendNewOrder( params ){
+    sendNewOrder( params = this.params ){
         if (this.currentStep < 4) { 
             params.frameNumber = 1;
             params.anim = 'staticCodeOnly';
@@ -514,14 +515,12 @@ export default class Coderunner {
     }
 
     submitPaymentClicked(dropinInstance){
-        dropinInstance.requestPaymentMethod(function (err, payload) {
+        dropinInstance.requestPaymentMethod((err, payload) =>  {
             if (err) {
-                // Handle errors in requesting payment method
                 console.error(err);
             }
 
-            // Send payload.nonce to your server
-            let amount = 1;
+            let amount = this.animations[this.params.anim].price;
             Service.processPayment( amount, payload.nonce ).then(json=>{
                 console.log('payment sent', json);
             });
