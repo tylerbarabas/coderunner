@@ -57,3 +57,15 @@ export async function processPayment(amount, nonce){
     } );
     return await res.json();
 }
+
+export async function unlock( orderNumber ){
+    let res = await fetch( production + '/coderunner/unlock', {
+        method: 'POST',
+        body: JSON.stringify({ orderNumber }),
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json' 
+        }
+    } );
+    return await res.json();
+}

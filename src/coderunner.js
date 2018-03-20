@@ -522,7 +522,12 @@ export default class Coderunner {
 
             let amount = this.animations[this.params.anim].price;
             Service.processPayment( amount, payload.nonce ).then(json=>{
-                console.log('payment sent', json);
+                console.log('Payment processed', json);
+                //Catch errors
+                Service.unlock( this.orderNumber ).then( res => {
+                    console.log('unlocked?', res);
+                    //Display final screen
+                } );
             });
         });
     }
