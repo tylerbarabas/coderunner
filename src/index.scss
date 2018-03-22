@@ -263,14 +263,15 @@ div.color-picker-container {
             cursor: pointer;
         }
 
-        .x-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 30px;
-       }
     }
+}
+
+.x-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 30px;
 }
 
 .custom-image {

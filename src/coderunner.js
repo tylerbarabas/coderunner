@@ -42,6 +42,7 @@ export default class Coderunner {
         this.animationContainer = null;
         this.anim = null;
         this.animationBoxes = null;
+        this.tocContainer = null;
         this.toc = null;
         this.tocInfo = null;
         this.submitPayment = null;
@@ -63,7 +64,7 @@ export default class Coderunner {
     }
 
     init(){
-        this.currentStep = 5;
+        this.currentStep = 1;
         this.message = '';
         this.preloadingBacklog = [];
         this.preloadingImages = [];
@@ -81,7 +82,7 @@ export default class Coderunner {
         this.backgroundColorButton = document.getElementById('background-color-button');
         this.dotsColorButton = document.getElementById('dots-color-button');
         this.colorPicker = document.getElementById('color-picker-container');
-        this.xClose = document.getElementById('x-close');
+        this.xClose = Array.prototype.slice.call( document.getElementsByClassName('x-close') );
         this.scanDestination = document.getElementById('scan-destination');
         this.pixelColor = document.getElementById('pixel-color');
         this.bgpColor = document.getElementById('bgp-color');
@@ -93,7 +94,8 @@ export default class Coderunner {
         this.anim = document.getElementById('anim');
         this.animationBoxes = [];
         this.submitPayment = document.getElementById('submit-payment');
-        this.toc = document.getElementById('toc-container');
+        this.tocContainer = document.getElementById('toc-container');
+        this.toc = document.getElementById('toc-text');
         this.tocInfo = document.getElementById('toc-info');
 
         this.toc.innerText = tocText;
@@ -115,7 +117,9 @@ export default class Coderunner {
         //this.shapeSelector.addEventListener( 'change', this.orderParamChanged );
         this.backgroundColorButton.addEventListener( 'click', this.colorButtonClicked );
         this.dotsColorButton.addEventListener( 'click', this.colorButtonClicked );
-        this.xClose.addEventListener( 'click', this.xCloseClicked );
+        this.xClose.map(e=>{
+            return e.addEventListener( 'click', this.xCloseClicked );
+        });
         this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
         this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
         this.tocInfo.addEventListener( 'click', this.tocToggle );
@@ -296,7 +300,6 @@ export default class Coderunner {
     }
 
     preloadImage( src, cb = null ) {
-        return;
         let backlogIndex = this.preloadingBacklog.indexOf( src );
         if (this.preloadingImages.length < 3 
             || src.indexOf('order') !== -1
@@ -408,6 +411,7 @@ export default class Coderunner {
             selected[i].className = 'color-btn';
         }
         this.closeColorPicker();
+        this.closeToc();
     }
 
     openColorPicker(){
@@ -457,7 +461,7 @@ export default class Coderunner {
             xColor = 'rgba(0,0,0,1)';
         }
         container.parentNode.style.backgroundColor = bgColor;
-        this.xClose.style.color = xColor;
+        this.xClose[0].style.color = xColor;
     }
 
     customImageButtonClicked(){
@@ -525,17 +529,17 @@ export default class Coderunner {
     }
 
     openToc(){
-        this.toc.style.opacity = 1;
-        this.toc.style.left = '0px';
+        this.tocContainer.style.opacity = 1;
+        this.tocContainer.style.left = '0px';
     }
 
     closeToc(){
-        this.toc.style.left = '-1000px';
-        this.toc.style.opacity = 0;
+        this.tocContainer.style.left = '-1000px';
+        this.tocContainer.style.opacity = 0;
     }
 
     tocToggle() {
-        let isOpen = parseInt( this.toc.style.opacity ) === 1;
+        let isOpen = parseInt( this.tocContainer.style.opacity ) === 1;
         if (isOpen)
             this.closeToc();
         else
