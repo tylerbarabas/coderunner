@@ -318,6 +318,45 @@ div.animation-container {
     }
 }
 
+.braintree-widget {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.submit-payment{
+    background-color: #ed603a;
+    width: 140px;
+    margin: 0 auto;
+    height: 50px;
+    color: white;
+    line-height: 50px;
+    border-radius: 5px;
+}
+
+.toc-info {
+    color: #FFF;
+    margin-bottom: 20px; 
+
+    .toc-info-inner{
+        color: #ed603a;
+    }
+}
+
+.toc-container{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: -1000px;
+    background-color: #ed603a;
+
+    opacity: 0;
+    transition: all 750ms;
+
+    .toc{
+        color: #fff;
+    }
+}
 
 // FONTS
 p.directions {

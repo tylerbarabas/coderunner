@@ -41,6 +41,8 @@ export default class Coderunner {
         this.animationContainer = null;
         this.anim = null;
         this.animationBoxes = null;
+        this.toc = null;
+        this.tocInfo = null;
         this.submitPayment = null;
 
         //Events
@@ -56,6 +58,7 @@ export default class Coderunner {
         this.xCloseClicked = this.xCloseClicked.bind(this);
         this.customImageButtonClicked = this.customImageButtonClicked.bind(this);
         this.customImageInputChanged = this.customImageInputChanged.bind(this);
+        this.tocToggle = this.tocToggle.bind(this);
     }
 
     init(){
@@ -89,6 +92,8 @@ export default class Coderunner {
         this.anim = document.getElementById('anim');
         this.animationBoxes = [];
         this.submitPayment = document.getElementById('submit-payment');
+        this.toc = document.getElementById('toc-container');
+        this.tocInfo = document.getElementById('toc-info');
 
         this.getInitData();
         this.setScreenOrientation();
@@ -110,6 +115,7 @@ export default class Coderunner {
         this.xClose.addEventListener( 'click', this.xCloseClicked );
         this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
         this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
+        this.tocInfo.addEventListener( 'click', this.tocToggle );
     }
 
     getInitData(){
@@ -512,6 +518,24 @@ export default class Coderunner {
             input.value = anim;
             this.orderParamChanged();
         }
+    }
+
+    openToc(){
+        this.toc.style.opacity = 1;
+        this.toc.style.left = '0px';
+    }
+
+    closeToc(){
+        this.toc.style.left = '-1000px';
+        this.toc.style.opacity = 0;
+    }
+
+    tocToggle() {
+        let isOpen = parseInt( this.toc.style.opacity ) === 1;
+        if (isOpen)
+            this.closeToc();
+        else
+            this.openToc();
     }
 
     submitPaymentClicked(dropinInstance){
