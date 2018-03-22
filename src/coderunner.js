@@ -2,6 +2,7 @@ import braintree from 'braintree-web-drop-in';
 import formSerialize from 'form-serialize';
 import * as Service from './service';
 import colors from 'colors.json';
+import tocText from 'toc.txt';
 
 export default class Coderunner {
     constructor(){
@@ -62,7 +63,7 @@ export default class Coderunner {
     }
 
     init(){
-        this.currentStep = 1;
+        this.currentStep = 5;
         this.message = '';
         this.preloadingBacklog = [];
         this.preloadingImages = [];
@@ -94,6 +95,8 @@ export default class Coderunner {
         this.submitPayment = document.getElementById('submit-payment');
         this.toc = document.getElementById('toc-container');
         this.tocInfo = document.getElementById('toc-info');
+
+        this.toc.innerText = tocText;
 
         this.getInitData();
         this.setScreenOrientation();
@@ -293,6 +296,7 @@ export default class Coderunner {
     }
 
     preloadImage( src, cb = null ) {
+        return;
         let backlogIndex = this.preloadingBacklog.indexOf( src );
         if (this.preloadingImages.length < 3 
             || src.indexOf('order') !== -1

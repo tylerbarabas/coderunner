@@ -343,19 +343,18 @@ div.animation-container {
 }
 
 .toc-container{
-    height: 100%;
-    width: 100%;
+    height: calc(100% - 50px);
+    width: calc(100% - 100px);
     position: absolute;
     top: 0;
     left: -1000px;
     background-color: #ed603a;
+    overflow-y: scroll;
+    padding: 25px 50px;
+    text-align: left;
 
     opacity: 0;
     transition: all 750ms;
-
-    .toc{
-        color: #fff;
-    }
 }
 
 // FONTS

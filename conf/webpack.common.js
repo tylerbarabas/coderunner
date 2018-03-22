@@ -80,6 +80,12 @@ module.exports = {
       use: [
         { loader: 'file-loader' }
       ]
+    },
+    {
+      test: /\.txt/,
+      use: [
+        { loader: 'raw-loader' }
+      ]
     }]
   },
   plugins: [
