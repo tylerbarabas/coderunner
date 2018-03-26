@@ -46,6 +46,8 @@ export default class Coderunner {
         this.toc = null;
         this.tocInfo = null;
         this.submitPayment = null;
+        this.unlockProgressBar = null;
+        this.finishPage = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -97,6 +99,8 @@ export default class Coderunner {
         this.tocContainer = document.getElementById('toc-container');
         this.toc = document.getElementById('toc-text');
         this.tocInfo = document.getElementById('toc-info');
+        this.unlockProgressBar = document.getElementById('unlock-progress-bar');
+        this.finishPage = document.getElementById('finish-page');
 
         this.toc.innerText = tocText;
 
@@ -554,13 +558,29 @@ export default class Coderunner {
 
             let amount = this.animations[this.params.anim].price;
             Service.processPayment( amount, payload.nonce ).then(json=>{
-                console.log('Payment processed', json);
-                //Catch errors
+                if ( !json.success ) {
+                    return console.error( 'Payment failed!' );
+                }
+                this.showFinishPage();
                 Service.unlock( this.orderNumber ).then( res => {
-                    console.log('unlocked?', res);
                     //Display final screen
+                    if ( res === true ) this.codeUnlocked();
                 } );
             });
         });
+    }
+
+    showFinishPage(){
+        this.finishPage.style.display = 'block';
+    }
+
+    hideFinishPage(){
+        this.finishPage.style.display = 'none';
+    }
+
+    codeUnlocked(){
+        console.log('codeUnlocked');
+        this.unlockProgressBar.style.width = '100%';
+        this.unlockProgressBar.innerText = '100%';
     }
 }

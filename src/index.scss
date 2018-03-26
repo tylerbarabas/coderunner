@@ -123,6 +123,17 @@ div.centered {
     position: relative;
     top: 48%;
     transform: translateY(-50%);
+    text-align: center;
+}
+
+div.full-screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    outline: thin dashed red;
+    background-color: red;
 }
 
 input.scan-destination {
@@ -327,7 +338,7 @@ div.animation-container {
 .submit-payment{
     background-color: #ed603a;
     width: 140px;
-    margin: 0 auto;
+    margin: 20px auto;
     height: 50px;
     color: white;
     line-height: 50px;
@@ -356,6 +367,21 @@ div.animation-container {
 
     opacity: 0;
     transition: all 750ms;
+}
+
+div.finish-page{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ed603a;
+
+    .pre-unlock{
+        display: none;
+    }
+    .post-unlock{
+    }
 }
 
 // FONTS
