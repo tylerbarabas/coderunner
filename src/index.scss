@@ -376,11 +376,14 @@ div.finish-page{
     height: 100%;
     width: 100%;
     background-color: #ed603a;
+    color: #fff;
+    display: none;
 
     .pre-unlock{
         display: none;
     }
     .post-unlock{
+        display: block;
     }
 }
 

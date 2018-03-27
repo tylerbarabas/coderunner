@@ -48,6 +48,10 @@ export default class Coderunner {
         this.submitPayment = null;
         this.unlockProgressBar = null;
         this.finishPage = null;
+        this.preUnlock = null;
+        this.postUnlock = null;
+        this.finalImage = null;
+        this.finalMessage = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -101,6 +105,10 @@ export default class Coderunner {
         this.tocInfo = document.getElementById('toc-info');
         this.unlockProgressBar = document.getElementById('unlock-progress-bar');
         this.finishPage = document.getElementById('finish-page');
+        this.preUnlock = document.getElementById('pre-unlock');
+        this.postUnlock = document.getElementById('post-unlock');
+        this.finalImage = document.getElementById('final-image');
+        this.finalMessage = document.getElementById('final-message');
 
         this.toc.innerText = tocText;
 
@@ -579,8 +587,14 @@ export default class Coderunner {
     }
 
     codeUnlocked(){
-        console.log('codeUnlocked');
         this.unlockProgressBar.style.width = '100%';
         this.unlockProgressBar.innerText = '100%';
+        this.finalImage.setAttribute('src', Service.api + '/orders/' + this.orderNumber + '/gif');
+        this.finalMessage.innerText = this.message;
+
+        setTimeout(()=>{
+            this.preUnlock.style.display = 'none';
+            this.postUnlock.style.display = 'block';
+        },1000);
     }
 }
