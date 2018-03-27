@@ -559,6 +559,7 @@ export default class Coderunner {
     }
 
     submitPaymentClicked(dropinInstance){
+        this.submitPayment.style.visibility = 'hidden';
         dropinInstance.requestPaymentMethod((err, payload) =>  {
             if (err) {
                 console.error(err);
@@ -567,6 +568,7 @@ export default class Coderunner {
             let amount = this.animations[this.params.anim].price;
             Service.processPayment( amount, payload.nonce ).then(json=>{
                 if ( !json.success ) {
+                    this.submitPayment.style.visibility = 'visible';
                     return console.error( 'Payment failed!' );
                 }
                 this.showFinishPage();
