@@ -333,12 +333,55 @@ div.animation-container {
 .braintree-widget {
     width: 90%;
     margin: 0 auto;
+    margin-top: -33px;
+}
+
+.email-widget{
+    width: 90%;
+    margin: 0 auto;
+    background-color: #FFF;
+    text-align: left;
+    font-family: 'sans-serif';
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px 5px 0 0;
+
+    label {
+        margin-left: 15px;
+        margin-right: 15px;
+        letter-spacing: -1px;
+        font-size: 14px;
+    }
+
+    input {
+        width: calc(100% - 40px);
+        display: block;
+        margin: 10px auto;
+        margin-top: 5px;
+        height: 36px;
+        border: 1px solid #b7b7b7;
+        font-size: 16px;
+        padding-left: 10px;
+        transition: 500ms border;
+
+        &.error{
+            border: 1px solid #e29695;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &:hover {
+            border: 1px solid #545454;
+        }
+    }
 }
 
 .submit-payment{
     background-color: #ed603a;
     width: 140px;
-    margin: 20px auto;
+    margin: 40px auto;
     height: 50px;
     color: white;
     line-height: 50px;
@@ -351,6 +394,11 @@ div.animation-container {
 
     .toc-info-inner{
         color: #ed603a;
+        cursor: pointer;
+    }
+
+    input {
+        vertical-align: bottom;
     }
 }
 
