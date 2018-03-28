@@ -46,6 +46,10 @@ export default class Coderunner {
         this.toc = null;
         this.tocInfo = null;
         this.submitPayment = null;
+        this.email1 = null;
+        this.email2 = null;
+        this.tocCheckbox = null;
+        this.paymentErrorContainer = null;
         this.unlockProgressBar = null;
         this.finishPage = null;
         this.preUnlock = null;
@@ -100,6 +104,10 @@ export default class Coderunner {
         this.anim = document.getElementById('anim');
         this.animationBoxes = [];
         this.submitPayment = document.getElementById('submit-payment');
+        this.paymentErrorContainer = document.getElementById('payment-error-container');
+        this.email1 = document.getElementById('email1');
+        this.email2 = document.getElementById('email2');
+        this.tocCheckbox = document.getElementById('toc-checkbox');
         this.tocContainer = document.getElementById('toc-container');
         this.toc = document.getElementById('toc-text');
         this.tocInfo = document.getElementById('toc-info');
@@ -559,25 +567,43 @@ export default class Coderunner {
     }
 
     submitPaymentClicked(dropinInstance){
-        this.submitPayment.style.visibility = 'hidden';
-        dropinInstance.requestPaymentMethod((err, payload) =>  {
-            if (err) {
-                console.error(err);
-            }
-
-            let amount = this.animations[this.params.anim].price;
-            Service.processPayment( amount, payload.nonce ).then(json=>{
-                if ( !json.success ) {
+        let verify = this.verifyPaymentForm();
+        this.paymentErrorContainer.innerHTML = '';
+        if (verify === true) {
+            this.submitPayment.style.visibility = 'hidden';
+            dropinInstance.requestPaymentMethod((err, payload) =>  {
+                if (err) {
+                    console.error(err);
                     this.submitPayment.style.visibility = 'visible';
-                    return console.error( 'Payment failed!' );
                 }
-                this.showFinishPage();
-                Service.unlock( this.orderNumber ).then( res => {
-                    //Display final screen
-                    if ( res === true ) this.codeUnlocked();
-                } );
+
+                let amount = this.animations[this.params.anim].price;
+                Service.processPayment( amount, payload.nonce ).then(json=>{
+                    if ( !json.success ) {
+                        this.submitPayment.style.visibility = 'visible';
+                        return console.error( 'Payment failed!' );
+                    }
+                    this.showFinishPage();
+                    Service.unlock( this.orderNumber ).then( res => {
+                        //Display final screen
+                        if ( res === true ) this.codeUnlocked();
+                    } );
+                });
             });
-        });
+        } else {
+            for (let i=0;i<verify.length;i+=1) {
+                this.paymentErrorContainer.innerHTML += verify[i]+'<br>';
+            }
+        }
+    }
+
+    verifyPaymentForm(){
+        let err = [];
+        if (this.email1.value === '') err.push('Please provide your email address.');
+        if (this.email1.value !== this.email2.value) err.push('Emails do not match');
+        if (!this.tocCheckbox.checked) err.push('Please accept terms and conditions!');
+
+        return ( err.length > 0 ) ? err : true;
     }
 
     showFinishPage(){
