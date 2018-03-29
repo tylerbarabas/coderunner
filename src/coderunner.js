@@ -4,7 +4,7 @@ import * as Service from './service';
 import colors from 'colors.json';
 import tocText from 'toc.txt';
 
-const DEFAULT_IMG = 'ihttps://acme.codes/modules/coderunner/client/img/default.gif';
+const DEFAULT_IMG = 'https://acme.codes/modules/coderunner/client/img/default.gif';
 
 export default class Coderunner {
     constructor(){
@@ -296,7 +296,7 @@ export default class Coderunner {
             this.previewImage.style.opacity = 1;
             this.hideCustomImagePreview();
             this.hidePreviewOverlay();
-            this.nextButton.style.display = 'block';
+            this.refreshStep();
         } else {
             this.preloadImage( src, this.showNextPreview.bind( this ) );
         }
@@ -406,9 +406,9 @@ export default class Coderunner {
         } else {
             this.prevButton.style.display = 'block';
         }
- 
+
         if (this.message === '' 
-            || ( this.currentStep === 3 && this.img1.value === '' )
+            || ( this.currentStep === 3 && this.img1.value.length === 0 )
             || ( this.currentStep === 4 && this.anim.value === '' )
             || this.currentStep >= allSteps.length ) {
             this.nextButton.style.display = 'none';
@@ -542,11 +542,15 @@ export default class Coderunner {
         }
     }
 
-    animationBoxClicked(e){
+    clearAnimationBoxSelection(){
         for (let i=0;i<this.animationBoxes.length;i+=1){
             let a = this.animationBoxes[i];
             if (a.className.indexOf('selected') !== -1) a.className = a.className.split(' selected')[0];
         }
+    }
+
+    animationBoxClicked(e){
+        this.clearAnimationBoxSelection();
         e.target.className += ' selected';
         let input = document.getElementById('anim');
         let anim = e.target.getAttribute('anim');
@@ -592,13 +596,14 @@ export default class Coderunner {
                         return console.error( 'Payment failed!' );
                     }
                     this.showFinishPage();
+                    this.prevButton.style.display = 'none';
                     Service.unlock( this.orderNumber ).then( res => {
                         //Display final screen
                         if ( res === true ) { 
                             let p = 25;
                             let interval = setInterval(async ()=>{
                                 let s = await Service.checkImageReady( this.orderNumber );
-                                if ( p < 96 ) p+=1;
+                                if ( p < 95 ) p+=1;
                                 this.setUnlockProgressBar( p );
                                 if ( s.fileSize > 0 ) { 
                                     clearInterval( interval );
@@ -647,8 +652,8 @@ export default class Coderunner {
         this.finalMessage.innerText = this.message;
 
         let src =  Service.api + '/orders/' + this.orderNumber + '/gif/' + Date.now(); 
-        this.finalImage.setAttribute('src', src );
-
+        this.finalImage.setAttribute( 'src', src );
+        this.prevButton.style.display = 'block';
         setTimeout(()=>{
             this.preUnlock.style.display = 'none';
             this.postUnlock.style.display = 'block';
@@ -656,13 +661,16 @@ export default class Coderunner {
     }
 
     resetCoderunner(){
-        console.log('resetCoderunner');
         this.currentStep = 1;
         this.refreshStep();
         this.hideFinishPage();
         this.preUnlock.style.display = 'none';
         this.postUnlock.style.display = 'block';
-        this.setUnlockProgressbar( 0 );
+        this.setUnlockProgressBar( 0 );
         this.message = '';
+        this.form.reset();
+        this.nextButton.style.display = 'none';
+        this.previewImage.src = DEFAULT_IMG;
+        this.clearAnimationBoxSelection();
     }
 }
