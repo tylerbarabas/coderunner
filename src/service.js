@@ -69,3 +69,8 @@ export async function unlock( orderNumber ){
     } );
     return await res.json();
 }
+
+export async function checkImageReady( orderNumber ) {
+    let res = await fetch( api + '/orders/' + orderNumber + '/gif-file-info' );
+    return await res.json();
+}

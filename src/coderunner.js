@@ -4,6 +4,8 @@ import * as Service from './service';
 import colors from 'colors.json';
 import tocText from 'toc.txt';
 
+const DEFAULT_IMG = 'ihttps://acme.codes/modules/coderunner/client/img/default.gif';
+
 export default class Coderunner {
     constructor(){
         //Variables
@@ -20,6 +22,7 @@ export default class Coderunner {
         this.colorPalettes = null;
         this.customImageInterval = null;
         this.params = null;
+        this.prevButtonReset = null;
 
         //Elements
         this.previewImage = null;
@@ -81,6 +84,7 @@ export default class Coderunner {
         this.preloadedImages = [];
         this.tryLoadingCount = 0;
         this.colorPalettes = {};
+        this.prevButtonReset = false;
 
         this.form = document.getElementById('form');
         this.previewImage = document.getElementById('preview-img');
@@ -376,8 +380,12 @@ export default class Coderunner {
     }
 
     prevButtonClicked(){
-        this.currentStep -= 1;
-        this.refreshStep();
+        if (this.prevButtonReset) {
+            this.resetCoderunner();
+        } else {
+            this.currentStep -= 1;
+            this.refreshStep();
+        }
     }
 
     refreshStep(){
@@ -586,7 +594,20 @@ export default class Coderunner {
                     this.showFinishPage();
                     Service.unlock( this.orderNumber ).then( res => {
                         //Display final screen
-                        if ( res === true ) this.codeUnlocked();
+                        if ( res === true ) { 
+                            let p = 25;
+                            let interval = setInterval(async ()=>{
+                                let s = await Service.checkImageReady( this.orderNumber );
+                                if ( p < 96 ) p+=1;
+                                this.setUnlockProgressBar( p );
+                                if ( s.fileSize > 0 ) { 
+                                    clearInterval( interval );
+                                    this.codeUnlocked();
+                                }
+                            },1000);
+
+                        }
+
                     } );
                 });
             });
@@ -608,21 +629,40 @@ export default class Coderunner {
 
     showFinishPage(){
         this.finishPage.style.display = 'block';
+        this.prevButtonReset = true;
     }
 
     hideFinishPage(){
         this.finishPage.style.display = 'none';
+        this.prevButtonReset = false;
     }
 
-    codeUnlocked(){
-        this.unlockProgressBar.style.width = '100%';
-        this.unlockProgressBar.innerText = '100%';
-        this.finalImage.setAttribute('src', Service.api + '/orders/' + this.orderNumber + '/gif');
+    setUnlockProgressBar( p = 0 ){
+        this.unlockProgressBar.style.width = `${p}%`;
+        this.unlockProgressBar.innerText = `${p}%`;
+    }
+
+    async codeUnlocked(){
+        this.setUnlockProgressBar(100);
         this.finalMessage.innerText = this.message;
+
+        let src =  Service.api + '/orders/' + this.orderNumber + '/gif/' + Date.now(); 
+        this.finalImage.setAttribute('src', src );
 
         setTimeout(()=>{
             this.preUnlock.style.display = 'none';
             this.postUnlock.style.display = 'block';
         },1000);
+    }
+
+    resetCoderunner(){
+        console.log('resetCoderunner');
+        this.currentStep = 1;
+        this.refreshStep();
+        this.hideFinishPage();
+        this.preUnlock.style.display = 'none';
+        this.postUnlock.style.display = 'block';
+        this.setUnlockProgressbar( 0 );
+        this.message = '';
     }
 }

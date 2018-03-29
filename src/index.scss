@@ -432,6 +432,16 @@ div.finish-page{
     }
     .post-unlock{
         display: none;
+
+        .download-btn{
+            height: 50px;
+            line-height: 50px;
+            width: 200px;
+            margin: 0 auto;
+            background-color: #2f6910;
+            border-radius: 15px;
+            font-size: 25px;
+        }
     }
 }
 
