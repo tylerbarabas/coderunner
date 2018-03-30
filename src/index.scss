@@ -47,6 +47,7 @@ div.container {
     position: relative;
     float: left;
     text-align: center;
+    transition: 1s background-color;
 
     &.portrait {
         display: block;
@@ -117,6 +118,7 @@ div.progress-bar-inner{
     width: 0;
     background-color: blue;
     transition: 500ms width;
+    color: #000;
 }
 
 div.centered {
@@ -386,6 +388,7 @@ div.animation-container {
     color: white;
     line-height: 50px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .toc-info {
@@ -417,7 +420,7 @@ div.animation-container {
     transition: all 750ms;
 }
 
-div.finish-page{
+div.unlocking-modal{
     position: absolute;
     left: 0;
     top: 0;
@@ -426,23 +429,17 @@ div.finish-page{
     background-color: #ed603a;
     color: #fff;
     display: none;
+}
 
-    .pre-unlock{
-        display: block;
-    }
-    .post-unlock{
-        display: none;
-
-        .download-btn{
-            height: 50px;
-            line-height: 50px;
-            width: 200px;
-            margin: 0 auto;
-            background-color: #2f6910;
-            border-radius: 15px;
-            font-size: 25px;
-        }
-    }
+.download-btn{
+    color: white;
+    height: 50px;
+    line-height: 50px;
+    width: 200px;
+    margin: 0 auto;
+    background-color: #2f6910;
+    border-radius: 15px;
+    font-size: 25px;
 }
 
 div.payment-error-container {

@@ -22,9 +22,9 @@ export default class Coderunner {
         this.colorPalettes = null;
         this.customImageInterval = null;
         this.params = null;
-        this.prevButtonReset = null;
 
         //Elements
+        this.parentContainers = null;
         this.previewImage = null;
         this.previewOverlay = null;
         this.progressBar = null;
@@ -54,10 +54,7 @@ export default class Coderunner {
         this.tocCheckbox = null;
         this.paymentErrorContainer = null;
         this.unlockProgressBar = null;
-        this.finishPage = null;
-        this.preUnlock = null;
-        this.postUnlock = null;
-        this.finalImage = null;
+        this.unlockingModal = null;
         this.finalMessage = null;
 
         //Events
@@ -86,6 +83,7 @@ export default class Coderunner {
         this.colorPalettes = {};
         this.prevButtonReset = false;
 
+        this.parentContainers = document.getElementsByClassName('container');
         this.form = document.getElementById('form');
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
@@ -116,10 +114,7 @@ export default class Coderunner {
         this.toc = document.getElementById('toc-text');
         this.tocInfo = document.getElementById('toc-info');
         this.unlockProgressBar = document.getElementById('unlock-progress-bar');
-        this.finishPage = document.getElementById('finish-page');
-        this.preUnlock = document.getElementById('pre-unlock');
-        this.postUnlock = document.getElementById('post-unlock');
-        this.finalImage = document.getElementById('final-image');
+        this.unlockingModal = document.getElementById('unlocking-modal');
         this.finalMessage = document.getElementById('final-message');
 
         this.toc.innerText = tocText;
@@ -181,10 +176,9 @@ export default class Coderunner {
     }
 
     setScreenOrientation(){
-        let containers = document.getElementsByClassName( 'container' );
         let orientation = ( window.innerHeight > window.innerWidth ) ? 'portrait' : 'landscape';
-        for (let i=0;i<containers.length;i+=1){
-            let c = containers[i];
+        for (let i=0;i<this.parentContainers.length;i+=1){
+            let c = this.parentContainers[i];
             c.className = c.className.split(' portrait')[0].split(' landscape')[0];
             c.className += ' ' + orientation;
         }
@@ -380,7 +374,7 @@ export default class Coderunner {
     }
 
     prevButtonClicked(){
-        if (this.prevButtonReset) {
+        if (this.currentStep === 6) {
             this.resetCoderunner();
         } else {
             this.currentStep -= 1;
@@ -410,10 +404,24 @@ export default class Coderunner {
         if (this.message === '' 
             || ( this.currentStep === 3 && this.img1.value.length === 0 )
             || ( this.currentStep === 4 && this.anim.value === '' )
+            || this. currentStep === 5
             || this.currentStep >= allSteps.length ) {
             this.nextButton.style.display = 'none';
         } else {
             this.nextButton.style.display = 'block';
+        }
+
+        let color = '';
+        if (this.currentStep === 6) {
+            color = '#ed603a';
+        }
+        this.adjustBgColors( color );
+    }
+
+    adjustBgColors( color = '' ){
+        for (let i=0;i<this.parentContainers.length;i+=1) {
+            let p = this.parentContainers[i];
+            p.style.backgroundColor = color;
         }
     }
 
@@ -595,8 +603,8 @@ export default class Coderunner {
                         this.submitPayment.style.visibility = 'visible';
                         return console.error( 'Payment failed!' );
                     }
-                    this.showFinishPage();
                     this.prevButton.style.display = 'none';
+                    this.unlockingModal.style.display = 'block';
                     Service.unlock( this.orderNumber ).then( res => {
                         //Display final screen
                         if ( res === true ) { 
@@ -632,16 +640,6 @@ export default class Coderunner {
         return ( err.length > 0 ) ? err : true;
     }
 
-    showFinishPage(){
-        this.finishPage.style.display = 'block';
-        this.prevButtonReset = true;
-    }
-
-    hideFinishPage(){
-        this.finishPage.style.display = 'none';
-        this.prevButtonReset = false;
-    }
-
     setUnlockProgressBar( p = 0 ){
         this.unlockProgressBar.style.width = `${p}%`;
         this.unlockProgressBar.innerText = `${p}%`;
@@ -652,25 +650,22 @@ export default class Coderunner {
         this.finalMessage.innerText = this.message;
 
         let src =  Service.api + '/orders/' + this.orderNumber + '/gif/' + Date.now(); 
-        this.finalImage.setAttribute( 'src', src );
-        this.prevButton.style.display = 'block';
+        this.previewImage.setAttribute( 'src', src );
+        this.currentStep = 6;
         setTimeout(()=>{
-            this.preUnlock.style.display = 'none';
-            this.postUnlock.style.display = 'block';
+            this.refreshStep();
+            this.unlockingModal.style.display = 'none';
         },1000);
     }
 
     resetCoderunner(){
+        this.form.reset();
         this.currentStep = 1;
-        this.refreshStep();
-        this.hideFinishPage();
-        this.preUnlock.style.display = 'none';
-        this.postUnlock.style.display = 'block';
         this.setUnlockProgressBar( 0 );
         this.message = '';
-        this.form.reset();
-        this.nextButton.style.display = 'none';
         this.previewImage.src = DEFAULT_IMG;
         this.clearAnimationBoxSelection();
+        this.refreshStep();
+        //this.nextButton.style.display = 'none';
     }
 }
