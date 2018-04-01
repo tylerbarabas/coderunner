@@ -81,21 +81,23 @@
                 <input type="hidden" name="anim" id="anim">
             </div> 
             <div class="centered step" id="step5">
-                <p class="directions big">Pay</p>
-                <div class="toc-info">
-                    <input type="checkbox" id="toc-checkbox">
-                    I agree to the <span class="toc-info-inner" id="toc-info">Terms and Conditions</span>
-                </div>
-                <div is="email-widget" class="email-widget">
-                    <label>Email for receipt</label> 
-                    <input type="text" id="email1" placeholder="your@email.com">
-                    <label>Confirm Email</label> 
-                    <input type="text" id="email2" placeholder="your@email.com">
-                </div>
-                <div id="braintree-widget" class="braintree-widget"></div>
-                <div class="payment-error-container" id="payment-error-container"></div>
-                <div class="submit-payment" id="submit-payment">
-                    Submit Payment
+                <div id="payment-fields">
+                    <p class="directions big">Pay</p>
+                    <div class="toc-info">
+                        <input type="checkbox" id="toc-checkbox">
+                        I agree to the <span class="toc-info-inner" id="toc-info">Terms and Conditions</span>
+                    </div>
+                    <div is="email-widget" class="email-widget">
+                        <label>Email for receipt</label> 
+                        <input type="text" id="email1" placeholder="your@email.com">
+                        <label>Confirm Email</label> 
+                        <input type="text" id="email2" placeholder="your@email.com">
+                    </div>
+                    <div id="braintree-widget" class="braintree-widget"></div>
+                    <div class="payment-error-container" id="payment-error-container"></div>
+                    <div class="submit-payment" id="submit-payment">
+                        Submit Payment
+                    </div>
                 </div>
             </div>
             <div class="centered step" id="step6">

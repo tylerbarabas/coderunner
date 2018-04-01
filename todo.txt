@@ -1,0 +1,9 @@
+Make color picker scrollable
+Style the progress bars
+Fix preview image size for mobile
+Horizontally center progress bar on mobile
+Payment form needs to be scrollable
+Prev and next buttons push closer to corners
+Cant open keyboard for credit card
+2nd time around doesnt have progress bar
+2nd time around needs to reload payment

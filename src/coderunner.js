@@ -48,6 +48,7 @@ export default class Coderunner {
         this.tocContainer = null;
         this.toc = null;
         this.tocInfo = null;
+        this.paymentFields = null;
         this.submitPayment = null;
         this.email1 = null;
         this.email2 = null;
@@ -105,6 +106,7 @@ export default class Coderunner {
         this.animationContainer = document.getElementById('animation-container');
         this.anim = document.getElementById('anim');
         this.animationBoxes = [];
+        this.paymentFields = document.getElementById('payment-fields');
         this.submitPayment = document.getElementById('submit-payment');
         this.paymentErrorContainer = document.getElementById('payment-error-container');
         this.email1 = document.getElementById('email1');
@@ -591,23 +593,26 @@ export default class Coderunner {
         this.paymentErrorContainer.innerHTML = '';
         if (verify === true) {
             this.submitPayment.style.visibility = 'hidden';
+            this.paymentFields.style.visibility = 'hidden';
             dropinInstance.requestPaymentMethod((err, payload) =>  {
                 if (err) {
                     console.error(err);
                     this.submitPayment.style.visibility = 'visible';
+                    this.paymentFields.style.visibility = 'visible';
                 }
 
                 let amount = this.animations[this.params.anim].price;
                 Service.processPayment( amount, payload.nonce ).then(json=>{
                     if ( !json.success ) {
                         this.submitPayment.style.visibility = 'visible';
+                        this.paymentFields.style.visibility = 'visible';
                         return console.error( 'Payment failed!' );
                     }
                     this.prevButton.style.display = 'none';
                     this.unlockingModal.style.display = 'block';
                     Service.unlock( this.orderNumber ).then( res => {
                         //Display final screen
-                        if ( res === true ) { 
+                        if ( res === true ) {
                             let p = 25;
                             let interval = setInterval(async ()=>{
                                 let s = await Service.checkImageReady( this.orderNumber );
@@ -648,6 +653,8 @@ export default class Coderunner {
     async codeUnlocked(){
         this.setUnlockProgressBar(100);
         this.finalMessage.innerText = this.message;
+ 
+        Service.sendEmail( this.orderNumber, this.email1.value );
 
         let src =  Service.api + '/orders/' + this.orderNumber + '/gif/' + Date.now(); 
         this.previewImage.setAttribute( 'src', src );
@@ -666,6 +673,5 @@ export default class Coderunner {
         this.previewImage.src = DEFAULT_IMG;
         this.clearAnimationBoxSelection();
         this.refreshStep();
-        //this.nextButton.style.display = 'none';
     }
 }

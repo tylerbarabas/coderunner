@@ -74,3 +74,8 @@ export async function checkImageReady( orderNumber ) {
     let res = await fetch( api + '/orders/' + orderNumber + '/gif-file-info' );
     return await res.json();
 }
+
+export async function sendEmail( orderNumber, email ) {
+    let res = await fetch ( api + '/orders/' + orderNumber + '/gif?eMail= ' + email );
+    return await res.text();
+}
