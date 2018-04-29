@@ -3,8 +3,8 @@ export const production = 'https://acme.codes';
 export const stage = 'https://service.animatedcodes.net';
 
 const constParams = {
-	xres: 500,
-	yres: 500
+	xres: 300,
+	yres: 300
 };
 
 export function serializeParams( params ){
