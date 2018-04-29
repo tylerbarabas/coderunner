@@ -1,6 +1,6 @@
 export const api = 'https://api.acme.codes';
 export const production = 'https://acme.codes';
-export const stage = 'https://stage.acme.codes';
+export const stage = 'https://service.animatedcodes.net';
 
 const constParams = {
 	xres: 500,
@@ -24,7 +24,7 @@ export async function getColorsJson(){
 }
 
 export async function newOrder( params ){
-    let res = await fetch( api + '/new?' + serializeParams( params ) + serializeParams(constParams).replace('?','&'));
+    let res = await fetch( api + '/new?' + serializeParams( params ) + '&' + serializeParams(constParams));
     return await res.json();
 }
 
