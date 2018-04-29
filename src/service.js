@@ -2,6 +2,11 @@ export const api = 'https://api.acme.codes';
 export const production = 'https://acme.codes';
 export const stage = 'https://stage.acme.codes';
 
+const constParams = {
+	xres: 500,
+	yres: 500
+};
+
 export function serializeParams( params ){
     return Object.keys( params ).map(function( key ) {
       return key + '=' + params[key];
@@ -9,7 +14,7 @@ export function serializeParams( params ){
 }
 
 export async function getAnimsJson(){
-    let res = await fetch( api + '/anims-json' );
+    let res = await fetch( api + '/anims-json?tags=image' );
     return await res.json();
 }
 
@@ -19,7 +24,7 @@ export async function getColorsJson(){
 }
 
 export async function newOrder( params ){
-    let res = await fetch( api + '/new?' + serializeParams( params ));
+    let res = await fetch( api + '/new?' + serializeParams( params ) + serializeParams(constParams).replace('?','&'));
     return await res.json();
 }
 
