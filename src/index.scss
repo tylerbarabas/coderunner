@@ -89,6 +89,15 @@ img.preview-img {
     }
 }
 
+div.preview-text{
+    position: absolute;
+    bottom: -40px;
+    text-align: center;
+    width: 100%;
+    font-size: 30px;
+    color: white;
+}
+
 div.preview-overlay {
     position: absolute;
     top: 0;

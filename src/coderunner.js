@@ -27,6 +27,7 @@ export default class Coderunner {
         this.parentContainers = null;
         this.previewImage = null;
         this.previewOverlay = null;
+        this.previewText = null;
         this.progressBar = null;
         this.nextButton = null;
         this.prevButton = null;
@@ -88,6 +89,7 @@ export default class Coderunner {
         this.form = document.getElementById('form');
         this.previewImage = document.getElementById('preview-img');
         this.previewOverlay = document.getElementById('preview-overlay');
+        this.previewText = document.getElementById('preview-text');
         this.progressBar = document.getElementById('progress-bar-inner');
         this.nextButton = document.getElementById('next-button');
         this.prevButton = document.getElementById('prev-button');
@@ -224,6 +226,7 @@ export default class Coderunner {
         else
             this.nextButton.style.display = 'block';       
 
+        this.previewText.innerText = e.target.value;
         if (e.target.value === '' || e.target.value === this.message) return;
         this.message = e.target.value;
 
