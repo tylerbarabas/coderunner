@@ -58,6 +58,7 @@ export default class Coderunner {
         this.unlockProgressBar = null;
         this.unlockingModal = null;
         this.finalMessage = null;
+        this.fullscreenOverlay = null;
 
         //Events
         this.setScreenOrientation = this.setScreenOrientation.bind(this);
@@ -73,6 +74,7 @@ export default class Coderunner {
         this.customImageButtonClicked = this.customImageButtonClicked.bind(this);
         this.customImageInputChanged = this.customImageInputChanged.bind(this);
         this.tocToggle = this.tocToggle.bind(this);
+        this.fadeOverlay = this.fadeOverlay.bind(this);
     }
 
     init(){
@@ -120,6 +122,7 @@ export default class Coderunner {
         this.unlockProgressBar = document.getElementById('unlock-progress-bar');
         this.unlockingModal = document.getElementById('unlocking-modal');
         this.finalMessage = document.getElementById('final-message');
+        this.fullscreenOverlay = document.getElementById('fullscreen-overlay');
 
         this.toc.innerText = tocText;
 
@@ -127,6 +130,13 @@ export default class Coderunner {
         this.setScreenOrientation();
         this.enableListeners();
         this.refreshStep();
+    }
+
+    fadeOverlay(){
+        this.fullscreenOverlay.style.opacity = 0;
+        setTimeout(()=>{
+            this.fullscreenOverlay.style.display = 'none';
+        },1000);
     }
 
     enableListeners(){
@@ -146,6 +156,7 @@ export default class Coderunner {
         this.customImageButton.addEventListener( 'click', this.customImageButtonClicked );
         this.customImageInput.addEventListener( 'change', this.customImageInputChanged );
         this.tocInfo.addEventListener( 'click', this.tocToggle );
+        window.addEventListener('load', this.fadeOverlay);
     }
 
     getInitData(){

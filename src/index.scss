@@ -455,6 +455,17 @@ div.payment-error-container {
     color: #ed603a;
 }
 
+div.fullscreen-overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: #101a39;
+    transition: 1000ms opacity;
+}
+
 // FONTS
 p.directions {
     color: #6e98fe;
