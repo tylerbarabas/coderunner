@@ -116,18 +116,22 @@ div.preview-overlay {
 }
 
 div.progress-bar-outter{
-    height: 15px;
+    height: 30px;
     width: 300px;
-    background-color: #fff;
+    background-color: #000;
     margin: 0 auto;
+    border-radius: 30px;
 }
 
 div.progress-bar-inner{
     height: 100%;
-    width: 0;
+    width: 30px;
+    min-width: 30px;
+    line-height: 30px;
     background-color: blue;
     transition: 500ms width;
-    color: #000;
+    color: #FFF;
+    border-radius: 30px;
 }
 
 div.centered {
